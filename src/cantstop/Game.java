@@ -12,11 +12,33 @@ import java.util.*;
 public class Game {
 
     private final static int winCondition = 3;
-    private final static String userPrompt = "> ";
+    public final static String userPrompt = "> ";
     
-    public void gameStart()
+    public static void gameStart(Queue<Player> players)
     {
+        var board = new GameBoard();
+        var diceCup = new DiceCup();
         
+        Player currentPlayer;
+        boolean winConditionMet = false;
+        
+        // Play game as long as someone hasn't won yet
+        while (!winConditionMet)
+        {
+            currentPlayer = players.peek();
+            currentPlayer.setMoving(true);
+            
+            do {
+                board.boardDraw(players);
+                currentPlayer.haveTurn(board, diceCup.rollDice());
+            } while (currentPlayer.isMoving());
+            
+            board.clearColumnsClaimed(players);
+            players.add(players.poll());
+        }
+        
+        players.peek().setMoving(true);
+        board.boardDraw(players);
     }
     
     public void gameEnd()
@@ -94,19 +116,6 @@ public class Game {
         } while (!input.toLowerCase().equals("n"));
         if (players.size() <= 0) { System.exit(0); };
         
-        var board = new GameBoard();
-        var diceCup = new DiceCup();
-        for (int i = 0; i < 10; i++)
-        {
-            int[] dice = diceCup.rollDice();
-            for (int die : dice)
-            {
-                System.out.print(die + ", ");
-            }
-            System.out.println("");
-        }
-        players.peek().setMoving(true);
-        board.boardDraw(players);
+        gameStart(players);
     }
-    
 }

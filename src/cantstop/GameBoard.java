@@ -12,12 +12,13 @@ import java.util.*;
 public class GameBoard extends Board {
     private final static int columnMin = 2;
     private final static int columnMax = 12;
-    private final static int boardWidth = columnMax - columnMin + 1;
+    private final static int boardWidth = columnMax - columnMin + 1; // include both ends of the board
     private final static int lengthMin = 3;
     private final static int lengthMax = 13;
     
     private final static int[] columnValues = new int[boardWidth];
-    private final static int[] columnSizes = new int[boardWidth]; // include both ends of the board
+    private final static int[] columnSizes = new int[boardWidth];
+    private final boolean[] columnClaimed = new boolean[boardWidth];
     
     public GameBoard()
     {
@@ -29,6 +30,7 @@ public class GameBoard extends Board {
         {
             columnValues[i] = value++;
             columnSizes[i] = size;
+            columnClaimed[i] = false;
             size += step;
             if (size >= lengthMax) { step *= -1; }
         }
@@ -98,11 +100,46 @@ public class GameBoard extends Board {
     
     public int[] getColumnSizes()
     {
-        return this.columnSizes;
+        return columnSizes;
+    }
+    
+    public int getColumnMin()
+    {
+        return columnMin;
     }
     
     public static int getBoardWidth()
     {
         return boardWidth;
+    }
+    
+    public void setColumnClaimed(int index, boolean claimed)
+    {
+        this.columnClaimed[index] = claimed;
+    }
+    
+    public boolean getColumnClaimed(int index)
+    {
+        return this.columnClaimed[index];
+    }
+    
+    public void clearColumnsClaimed(Queue<Player> players)
+    {
+        Iterator iterPlayers = players.iterator();
+        Player player;
+
+        while (iterPlayers.hasNext())
+        {
+            player = (Player) iterPlayers.next();
+            
+            // Forcibly set all claimed column values to -1
+            for (int i = 0; i < boardWidth; i++)
+            {
+                if (this.columnClaimed[i])
+                {
+                    player.blockColumn(i);
+                }
+            }
+        }
     }
 }

@@ -10,10 +10,10 @@ package cantstop;
  */
 public interface Turn {
     public int[] getPosCurrent();
-    public void savePos();
+    public void savePos(GameBoard board);
     public boolean isMoving();
     public void setMoving(boolean isMoving);
     public int[] getPosMoving();
-    public void haveTurn();
+    public void haveTurn(GameBoard board, int[] diceRoll);
     
 }
