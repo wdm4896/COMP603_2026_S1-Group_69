@@ -15,6 +15,11 @@ public class Player extends Person implements Turn {
     private int claimedTotal = 0;
     private int[] claimedColumns = new int[Game.getWinCondition()];
     
+    public Player(String name, Colour colour)
+    {
+        super(name, colour);
+    }
+    
     @Override
     public int[] getPosCurrent()
     {

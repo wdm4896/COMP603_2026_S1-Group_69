@@ -11,7 +11,13 @@ package cantstop;
 abstract class Person {
     private String name;
     private Colour colour;
-    private int winsTotal;
+    private int winsTotal = 0;
+    
+    public Person(String name, Colour colour)
+    {
+        this.name = name;
+        this.colour = colour;
+    }
     
     public String getName()
     {
