@@ -68,7 +68,7 @@ public class GameBoard extends Board {
     
     private void lineDraw(String name, int[] columns, Player player)
     {
-        System.out.print(String.format("%-10s", name));
+        System.out.print(String.format("%-15s", name));
         for (int column = 0; column < columns.length; column++)
         {
             if (columns[column] == -1) // claimed column

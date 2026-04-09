@@ -11,11 +11,25 @@ package cantstop;
 public class DiceCup {
     private final int totalDice = 4;
     
-    Dice[] dice = new Dice[totalDice];
+    private final Dice[] dice = new Dice[totalDice];
+    
+    public DiceCup()
+    {
+        for (int i = 0; i < totalDice; i++)
+        { 
+            dice[i] = new Dice(1, 6);
+        }
+    }
     
     public int[] rollDice()
     {
-        int[] dice = new int[totalDice];
-        return dice;
+        int[] diceValues = new int[totalDice];
+        
+        for (int i = 0; i < totalDice; i++)
+        {
+            diceValues[i] = dice[i].roll();
+        }
+        
+        return diceValues;
     }
 }

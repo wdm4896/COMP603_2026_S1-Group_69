@@ -95,6 +95,16 @@ public class Game {
         if (players.size() <= 0) { System.exit(0); };
         
         var board = new GameBoard();
+        var diceCup = new DiceCup();
+        for (int i = 0; i < 10; i++)
+        {
+            int[] dice = diceCup.rollDice();
+            for (int die : dice)
+            {
+                System.out.print(die + ", ");
+            }
+            System.out.println("");
+        }
         players.peek().setMoving(true);
         board.boardDraw(players);
     }

@@ -10,9 +10,15 @@ import java.util.Random;
  * @author admin
  */
 public class Dice {
-    private final int valueMin = 1;
-    private final int valueMax = 6;
-    private Random r = new Random(); 
+    private final int valueMin;
+    private final int valueMax;
+    private final Random r = new Random();
+    
+    public Dice(int valueMin, int valueMax)
+    {
+        this.valueMin = valueMin;
+        this.valueMax = valueMax;
+    }
     
     public int roll()
     {
