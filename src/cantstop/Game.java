@@ -77,7 +77,7 @@ public class Game {
     
     public static void main(String[] args) {
         Queue<Player> players = new LinkedList<Player>();
-        Scanner kbinput = new Scanner(System.in);
+        var kbinput = new Scanner(System.in);
         
         // Add players
         String input = "";
@@ -93,6 +93,10 @@ public class Game {
             }
         } while (!input.toLowerCase().equals("n"));
         if (players.size() <= 0) { System.exit(0); };
+        
+        var board = new GameBoard();
+        players.peek().setMoving(true);
+        board.boardDraw(players);
     }
     
 }

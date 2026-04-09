@@ -18,6 +18,9 @@ public class Player extends Person implements Turn {
     public Player(String name, Colour colour)
     {
         super(name, colour);
+        this.posCurrent[7] = -1;
+        this.posMoving[7] = -1;
+        if (name.equals("test")) { claimedColumns[claimedTotal++] = 7; }
     }
     
     @Override
@@ -54,5 +57,10 @@ public class Player extends Person implements Turn {
     public void haveTurn()
     {
         
+    }
+    
+    public int[] getClaimedColumns()
+    {
+        return this.claimedColumns;
     }
 }
