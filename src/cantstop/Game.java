@@ -19,8 +19,10 @@ public class Game {
         var board = new GameBoard();
         var diceCup = new DiceCup();
         
-        Player currentPlayer;
+        Player currentPlayer = null;
         boolean winConditionMet = false;
+        
+        gameReset(players);
         
         // Play game as long as someone hasn't won yet
         while (!winConditionMet)
@@ -34,11 +36,30 @@ public class Game {
             } while (currentPlayer.isMoving());
             
             board.clearColumnsClaimed(players);
-            players.add(players.poll());
+            
+            if (currentPlayer.getClaimedTotal() == winCondition)
+            {
+                winConditionMet = true;
+            } else
+            {
+                players.add(players.poll());
+            }
         }
         
-        players.peek().setMoving(true);
         board.boardDraw(players);
+        System.out.println("\n" + currentPlayer.getColour().getAnsi() + currentPlayer.getName() + Colour.DEFAULT.getAnsi() + " wins!!!");
+    }
+    
+    public static void gameReset(Queue<Player> players)
+    {
+        Iterator iterPlayers = players.iterator();
+        Player player;
+        
+        while (iterPlayers.hasNext())
+        {
+            player = (Player) iterPlayers.next();
+            player.resetColumns();
+        }
     }
     
     public void gameEnd()
@@ -105,17 +126,35 @@ public class Game {
         String input = "";
         do {
             System.out.print("Would you like to add a new player? [Y/n]:\n" + userPrompt);
-            input = kbinput.nextLine().strip();
-            if (input.toLowerCase().equals("y"))
+            input = kbinput.nextLine().strip().toLowerCase(); // normalise input
+            if (input.equals("y"))
             {
                 players.add(addPlayer());
-            } else if (!(input.toLowerCase().equals("y") || input.toLowerCase().equals("n"))) // invalid input
+            } else if (!(input.equals("y") || input.equals("n"))) // invalid input
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
             }
-        } while (!input.toLowerCase().equals("n"));
-        if (players.size() <= 0) { System.exit(0); };
+        } while (!input.equals("n"));
+        if (players.size() <= 0) { System.exit(0); }
         
-        gameStart(players);
+        // Play the game
+        boolean play = true;
+        do
+        {
+            gameStart(players);
+            do
+            {    
+                System.out.print("\nWould you like to play again? [Y/n]:\n" + userPrompt);
+                input = kbinput.nextLine().strip().toLowerCase(); // normalise input
+                
+                if (input.equals("y") || input.equals("n")) // valid input
+                {
+                    play = (input.equals("y"));
+                } else
+                {
+                    System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
+                }
+            } while (!(input.equals("y") || input.equals("n")));
+        } while (play);
     }
 }

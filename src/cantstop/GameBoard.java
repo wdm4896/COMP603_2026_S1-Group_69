@@ -76,19 +76,14 @@ public class GameBoard extends Board {
             if (columns[column] == -1) // claimed column
             {
                 boolean claimed = false;
+                
                 for (int claimedColumn : player.getClaimedColumns())
                 {
                     // Check if column is claimed by current player
                     if (column == claimedColumn) { claimed = true; }
                 }
                 
-                if (claimed)
-                {
-                    System.out.print(" CL");
-                } else
-                {
-                    System.out.print(" XX");
-                }
+                System.out.print(((claimed) ? " CL" : " XX"));
             } else
             {
                 System.out.print(" " + String.format("%02d", columns[column]));

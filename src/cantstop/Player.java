@@ -14,15 +14,11 @@ public class Player extends Person implements Turn {
     private int[] posMoving = new int[GameBoard.getBoardWidth()];
     private boolean isMoving = false;
     private int claimedTotal = 0;
-    private int[] claimedColumns = new int[Game.getWinCondition()];
+    private final int[] claimedColumns = new int[Game.getWinCondition()];
     
     public Player(String name, Colour colour)
     {
         super(name, colour);
-        for (int i = 0; i < this.claimedColumns.length; i++)
-        {
-            claimedColumns[i] = -1;
-        }
     }
     
     @Override
@@ -39,13 +35,25 @@ public class Player extends Person implements Turn {
         {
             // Check for any claimed columns not yet tracked
             if (
-                    board.getColumnSizes()[i] == posCurrent[i] &&
+                    board.getColumnSizes()[i] == this.posCurrent[i] &&
                     board.getColumnClaimed(i) == false
             ) {
-                this.claimedColumns[claimedTotal++] = i;
+                this.claimedColumns[this.claimedTotal++] = i;
                 board.setColumnClaimed(i, true);
             }
         }
+    }
+    
+    public void resetColumns()
+    {
+        for (int i = 0; i < this.claimedColumns.length; i++)
+        {
+            this.claimedColumns[i] = -1;
+        }
+        this.claimedTotal = 0;
+        
+        this.posCurrent = new int[GameBoard.getBoardWidth()];
+        this.posMoving = new int[GameBoard.getBoardWidth()];
     }
     
     @Override
@@ -66,7 +74,6 @@ public class Player extends Person implements Turn {
         return this.posMoving;
     }
     
-    // For blocking out columns
     public void blockColumn(int index)
     {
         this.posCurrent[index] = -1;
@@ -81,18 +88,18 @@ public class Player extends Person implements Turn {
         // Ask to continue turn
         String input = "";
         do {
-            System.out.print("Would you like to roll? [Y/n]:\n" + Game.userPrompt);
-            input = kbinput.nextLine().strip();
-            if (input.toLowerCase().equals("n"))
+            System.out.print("\nWould you like to roll? [Y/n]:\n" + Game.userPrompt);
+            input = kbinput.nextLine().strip().toLowerCase(); // normalise input
+            if (input.equals("n"))
             {
                 savePos(board);
                 this.isMoving = false;
                 return;
-            } else if (!(input.toLowerCase().equals("y") || input.toLowerCase().equals("n"))) // invalid input
+            } else if (!(input.equals("y") || input.equals("n"))) // invalid input
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
             }
-        } while (!input.toLowerCase().equals("y"));
+        } while (!input.equals("y"));
         
         
         // Roll dice
@@ -124,10 +131,10 @@ public class Player extends Person implements Turn {
         // Increases value
         int targetIndex = (2 * diceRoll[saveValue - 1]) - board.getColumnMin();
         if (
-                0 <= posMoving[targetIndex] &&
-                posMoving[targetIndex] < board.getColumnSizes()[targetIndex]
+                0 <= this.posMoving[targetIndex] &&
+                this.posMoving[targetIndex] < board.getColumnSizes()[targetIndex]
         ) {
-            posMoving[targetIndex]++;
+            this.posMoving[targetIndex]++;
         }
         
     }
@@ -135,5 +142,10 @@ public class Player extends Person implements Turn {
     public int[] getClaimedColumns()
     {
         return this.claimedColumns;
+    }
+    
+    public int getClaimedTotal()
+    {
+        return this.claimedTotal;
     }
 }
