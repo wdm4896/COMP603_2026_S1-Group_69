@@ -10,8 +10,8 @@ import java.util.*;
  * @author admin
  */
 public class GameBoard extends Board {
-    private final static int columnMin = 2;
-    private final static int columnMax = 12;
+    private final static int columnMin = DiceCup.getDiceValueMin() * 2;
+    private final static int columnMax = DiceCup.getDiceValueMax() * 2;
     private final static int boardWidth = columnMax - columnMin + 1; // include both ends of the board
     private final static int lengthMin = 3;
     private final static int lengthMax = 13;
@@ -65,6 +65,19 @@ public class GameBoard extends Board {
                     playerMoving.getPosMoving(), 
                     playerMoving
             );
+            
+            // Print moving pieces for moving player
+            if (playerMoving.getMovingPiecesMax() - playerMoving.getMovingPiecesAvailable() > 0)
+            {
+                int[] movingPieces = playerMoving.getMovingPieces();
+                System.out.print("Moving piece values: " + movingPieces[0]);
+                for (int piece = 1; piece < movingPieces.length; piece++)
+                {
+                    if (movingPieces[piece] == 0) { continue; }
+                    System.out.print(", " + movingPieces[piece]);
+                }
+                System.out.println("");
+            }
         }
     }
     

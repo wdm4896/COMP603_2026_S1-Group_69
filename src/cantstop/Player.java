@@ -117,7 +117,12 @@ public class Player extends Person implements Turn {
         
         
         // Roll dice
-        int[] diceChoice = diceCup.rollTurn(this.movingPieces, this.movingPiecesAvailable, board);
+        int[] diceChoice = diceCup.rollTurn(
+                this.posMoving,
+                this.movingPieces,
+                this.movingPiecesAvailable,
+                board
+        );
         
         // Bust if no choices can be made
         if (diceChoice == null)

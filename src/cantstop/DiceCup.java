@@ -11,6 +11,9 @@ import java.util.*;
  * @author admin
  */
 public class DiceCup {
+    private final static int diceValueMin = 1;
+    private final static int diceValueMax = 6;
+    
     private final static int diceTotal = 4;
     private final static int diceChosenMax = 2; // dice that can be paired
     private final static int diceCombinations = Math.combination(diceTotal, diceChosenMax);// = diceTotal / (diceTotal - diceChosenMax);
@@ -22,7 +25,7 @@ public class DiceCup {
     {
         for (int i = 0; i < diceTotal; i++)
         { 
-            dice[i] = new Dice(1, 6);
+            dice[i] = new Dice(diceValueMin, diceValueMax);
         }
     }
     
@@ -64,7 +67,13 @@ public class DiceCup {
         }
     }
     
-    private boolean dicePairingCheck(int[] movingPieces, int movingPiecesAvailable, List<Integer> movingPossibility, GameBoard board, int pairingSum)
+    private boolean dicePairingCheck(
+            int[] movingPos,
+            int[] movingPieces,
+            int movingPiecesAvailable,
+            GameBoard board,
+            int pairingSum
+    )
     {
         // If the column on the board is already claimed
         if (board.getColumnClaimed(pairingSum - board.getColumnMin()))
@@ -72,7 +81,7 @@ public class DiceCup {
             return false;
         }
 
-        // If there is no possibility for another moving piece
+        // Check if the piece is a moving piece
         boolean inMovingPieces = false;
         
         for (int piece : movingPieces)
@@ -80,7 +89,19 @@ public class DiceCup {
             inMovingPieces = (piece == pairingSum || inMovingPieces);
         }
         
-        if (!inMovingPieces && movingPiecesAvailable - movingPossibility.size() <= 0)
+        // If the moving piece can't move anymore
+        if (inMovingPieces)
+        {
+            int targetIndex = pairingSum - board.getColumnMin();
+            
+            if (movingPos[targetIndex] >= board.getColumnSizes()[targetIndex])
+            {
+                return false;
+            }
+        }
+        
+        // If there is no possibility for another moving piece to be added
+        if (!inMovingPieces && movingPiecesAvailable <= 0)
         {
             return false;
         }
@@ -114,7 +135,12 @@ public class DiceCup {
         }
     }
     
-    private List<List<Integer[]>> dicePairingChoice(int[] movingPieces, int movingPiecesAvailable, GameBoard board)
+    private List<List<Integer[]>> dicePairingChoice(
+            int[] movingPos,
+            int[] movingPieces,
+            int movingPiecesAvailable,
+            GameBoard board
+    )
     {
         List<List<Integer[]>> diceChoices = new ArrayList<>();
         List<Integer[]> dicePairings = new ArrayList<Integer[]>();
@@ -134,7 +160,13 @@ public class DiceCup {
             }
 
             // Check if the dice pairing is a valid one
-            isValidPairing = dicePairingCheck(movingPieces, movingPiecesAvailable, movingPossibility, board, sum);
+            isValidPairing = dicePairingCheck(
+                    movingPos,
+                    movingPieces,
+                    movingPiecesAvailable - movingPossibility.size(),
+                    board,
+                    sum
+            );
             
             if (!isValidPairing)
             {
@@ -206,7 +238,7 @@ public class DiceCup {
         
     }
     
-    public int[] rollTurn(int[] movingPieces, int movingPiecesAvailable, GameBoard board)
+    public int[] rollTurn(int[] movingPos, int[] movingPieces, int movingPiecesAvailable, GameBoard board)
     {
         var kbinput = new Scanner(System.in);
         int[] diceRoll = rollDice();
@@ -221,7 +253,7 @@ public class DiceCup {
         
         // Pair and display all possible pairings
         dicePairings(diceRoll);
-        List<List<Integer[]>> diceChoices= dicePairingChoice(movingPieces, movingPiecesAvailable, board);
+        List<List<Integer[]>> diceChoices = dicePairingChoice(movingPos, movingPieces, movingPiecesAvailable, board);
         printChoices(diceChoices);
         
         if (diceChoices.isEmpty())
@@ -251,5 +283,15 @@ public class DiceCup {
         } while (!(1 <= saveValue && saveValue <= diceChoices.size()));
         
         return choiceToOutput(diceChoices.get(saveValue - 1));
+    }
+    
+    public static int getDiceValueMin()
+    {
+        return diceValueMin;
+    }
+    
+    public static int getDiceValueMax()
+    {
+        return diceValueMax;
     }
 }
