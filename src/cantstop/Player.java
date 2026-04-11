@@ -10,8 +10,11 @@ import java.util.*;
  * @author admin
  */
 public class Player extends Person implements Turn {
-    private int[] posCurrent = new int[GameBoard.getBoardWidth()];
-    private int[] posMoving = new int[GameBoard.getBoardWidth()];
+    private final static int movingPiecesMax = 3;
+    private int[] posCurrent;// = new int[GameBoard.getBoardWidth()];
+    private int[] posMoving;// = new int[GameBoard.getBoardWidth()];
+    private int movingPiecesAvailable = movingPiecesMax;
+    private int[] movingPieces = new int[movingPiecesMax];
     private boolean isMoving = false;
     private int claimedTotal = 0;
     private final int[] claimedColumns = new int[Game.getWinCondition()];
@@ -31,6 +34,7 @@ public class Player extends Person implements Turn {
     public void savePos(GameBoard board)
     {
         this.posCurrent = this.posMoving.clone();
+        
         for (int i = 0; i < GameBoard.getBoardWidth(); i++)
         {
             // Check for any claimed columns not yet tracked
@@ -42,6 +46,16 @@ public class Player extends Person implements Turn {
                 board.setColumnClaimed(i, true);
             }
         }
+        
+        movingPieces = new int[movingPiecesMax];
+        this.movingPiecesAvailable = movingPiecesMax;
+    }
+    
+    public void bust()
+    {
+        this.posMoving = this.posCurrent.clone();
+        movingPieces = new int[movingPiecesMax];
+        this.movingPiecesAvailable = movingPiecesMax;
     }
     
     public void resetColumns()
@@ -81,7 +95,7 @@ public class Player extends Person implements Turn {
     }
     
     @Override
-    public void haveTurn(GameBoard board, int[] diceRoll)
+    public void haveTurn(GameBoard board, DiceCup diceCup)
     {
         var kbinput = new Scanner(System.in);
         
@@ -103,39 +117,44 @@ public class Player extends Person implements Turn {
         
         
         // Roll dice
-        for (int dice = 0; dice < diceRoll.length; dice++)
+        int[] diceChoice = diceCup.rollTurn(this.movingPieces, this.movingPiecesAvailable, board);
+        
+        // Bust if no choices can be made
+        if (diceChoice == null)
         {
-            System.out.println((dice + 1) + ") " + diceRoll[dice]);
+            bust();
+            this.isMoving = false;
+            return;
         }
         
-        // Save values to movement position - will need to be changed entirely
-        System.out.println("Placeholder text...");
-        int saveValue = -1;
-        do
+        // Save moving pieces
+        boolean inMovingPieces;
+        for (int choice : diceChoice)
         {
-            System.out.print(Game.userPrompt);
-            try
-            {
-                saveValue = kbinput.nextInt();
-            } catch(java.util.InputMismatchException e)
-            {
-                kbinput.nextLine();
+            // Increases moving value
+            int targetIndex = choice - board.getColumnMin();
+            if (
+                    0 <= this.posMoving[targetIndex] &&
+                    this.posMoving[targetIndex] < board.getColumnSizes()[targetIndex]
+            ) {
+                this.posMoving[targetIndex]++;
             }
             
-            if (!(1 <= saveValue && saveValue <= diceRoll.length))
+            // Add to the current moving pieces if they don't already exist
+            inMovingPieces = false;
+            
+            for (int piece : this.movingPieces)
             {
-                System.out.println("Invalid input. Please input a value between 1 and " + (diceRoll.length) + "...");
+                inMovingPieces = (piece == choice || inMovingPieces);
             }
-        } while (!(1 <= saveValue && saveValue <= diceRoll.length));
-        
-        // Increases value
-        int targetIndex = (2 * diceRoll[saveValue - 1]) - board.getColumnMin();
-        if (
-                0 <= this.posMoving[targetIndex] &&
-                this.posMoving[targetIndex] < board.getColumnSizes()[targetIndex]
-        ) {
-            this.posMoving[targetIndex]++;
+            
+            if (!inMovingPieces && this.movingPiecesAvailable > 0)
+            {
+                this.movingPieces[movingPiecesMax - movingPiecesAvailable--] = choice;
+            }
         }
+        
+        
         
     }
     
@@ -147,5 +166,20 @@ public class Player extends Person implements Turn {
     public int getClaimedTotal()
     {
         return this.claimedTotal;
+    }
+    
+    public int[] getMovingPieces()
+    {
+        return this.movingPieces;
+    }
+    
+    public int getMovingPiecesAvailable()
+    {
+        return this.movingPiecesAvailable;
+    }
+    
+    public int getMovingPiecesMax()
+    {
+        return movingPiecesMax;
     }
 }

@@ -32,7 +32,7 @@ public class Game {
             
             do {
                 board.boardDraw(players);
-                currentPlayer.haveTurn(board, diceCup.rollDice());
+                currentPlayer.haveTurn(board, diceCup);
             } while (currentPlayer.isMoving());
             
             board.clearColumnsClaimed(players);
@@ -125,7 +125,7 @@ public class Game {
         // Add players
         String input = "";
         do {
-            System.out.print("Would you like to add a new player? [Y/n]:\n" + userPrompt);
+            System.out.print("Would you like to add a new player? [y/n]:\n" + userPrompt);
             input = kbinput.nextLine().strip().toLowerCase(); // normalise input
             if (input.equals("y"))
             {
@@ -144,7 +144,7 @@ public class Game {
             gameStart(players);
             do
             {    
-                System.out.print("\nWould you like to play again? [Y/n]:\n" + userPrompt);
+                System.out.print("\nWould you like to play again? [y/n]:\n" + userPrompt);
                 input = kbinput.nextLine().strip().toLowerCase(); // normalise input
                 
                 if (input.equals("y") || input.equals("n")) // valid input

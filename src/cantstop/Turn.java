@@ -14,6 +14,6 @@ public interface Turn {
     public boolean isMoving();
     public void setMoving(boolean isMoving);
     public int[] getPosMoving();
-    public void haveTurn(GameBoard board, int[] diceRoll);
+    public void haveTurn(GameBoard board, DiceCup diceCup);
     
 }
