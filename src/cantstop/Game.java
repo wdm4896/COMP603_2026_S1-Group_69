@@ -4,13 +4,16 @@
  */
 package cantstop;
 
-import java.util.*;
+import java.util.Scanner;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 /**
  *
  * @author admin
  */
 public class Game {
-
+    private final static int playersMax = 4;
     private final static int winCondition = 3;
     public final static String userPrompt = "> ";
     
@@ -48,7 +51,7 @@ public class Game {
         }
         
         board.boardDraw(players);
-        System.out.println("\n" + currentPlayer.getColour().getAnsi() + currentPlayer.getName() + Colour.DEFAULT.getAnsi() + " wins!!!");
+        System.out.println("\n" + currentPlayer.getColour().font() + currentPlayer.getName() + Colour.DEFAULT.font() + " wins!!!");
     }
     
     public static void gameReset(Queue<Player> players)
@@ -74,8 +77,16 @@ public class Game {
             input = kbinput.nextLine().strip().toLowerCase(); // normalise input
             if (input.equals("y"))
             {
-                System.out.println("\nSaving score...");
+                System.out.println("\nSaving scores...");
                 scoreBoard.scoresSave(players);
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                }
             } else if (!(input.equals("y") || input.equals("n"))) // invalid input
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
@@ -102,7 +113,7 @@ public class Game {
         for (int i = 1; i < Colour.values().length; i++) // first colour is the default terminal one - skip
         {
             colourOption = Colour.values()[i];
-            System.out.println(i + ") " + colourOption.name());
+            System.out.println(i + ") " + colourOption.font() + colourOption.name() + Colour.DEFAULT.font());
         }
         
         // Set player colour
@@ -124,16 +135,19 @@ public class Game {
             }
         } while (!(1 <= colourIndex && colourIndex < Colour.values().length));
         colour = Colour.values()[colourIndex];
-        System.out.println("\nAdding player " + colour.getAnsi() + name + Colour.DEFAULT.getAnsi() + " to the game...\n" );
-
+        System.out.println("\nAdding player " + colour.font() + name + Colour.DEFAULT.font() + " to the game...\n" );
+        
+        try
+        {
+            Thread.sleep(500);
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+        }
         
         Player player = new Player(name, colour);
         return player;
-    }
-    
-    public static int getWinCondition()
-    {
-        return winCondition;
     }
     
     public static void main(String[] args) {
@@ -153,17 +167,39 @@ public class Game {
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
             }
-        } while (!input.equals("n"));
-        if (players.size() <= 0) { System.exit(0); }
+        } while (!input.equals("n") && players.size() < playersMax);
+        if (players.size() <= 0) {
+            kbinput.close();
+            System.exit(0);
+        }
         
         // Play the game
         boolean play = true;
         do
         {
+            System.out.println("\nStarting game...");
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+            }
             gameStart(players);
+            
+            // Play again
             do
             {
                 scoreBoard.scoresDisplay(players);
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                }
                 System.out.print("\nWould you like to play again? [y/n]:\n" + userPrompt);
                 input = kbinput.nextLine().strip().toLowerCase(); // normalise input
                 
@@ -180,5 +216,10 @@ public class Game {
         gameEnd(scoreBoard, players);
         
         kbinput.close();
+    }
+        
+    public static int getWinCondition()
+    {
+        return winCondition;
     }
 }

@@ -4,7 +4,7 @@
  */
 package cantstop;
 
-import java.util.*;
+import java.util.Queue;
 /**
  *
  * @author admin

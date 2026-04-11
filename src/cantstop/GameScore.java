@@ -4,8 +4,12 @@
  */
 package cantstop;
 
-import java.util.*;
-import java.io.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 /**
@@ -40,7 +44,7 @@ public class GameScore extends Score implements ScoreSave {
                 }
             }
             
-            System.out.println(pHighest.getColour().getAnsi() + pHighest.getName() + Colour.DEFAULT.getAnsi() + ": " + pHighest.getWinsTotal());
+            System.out.println(pHighest.getColour().font() + pHighest.getName() + Colour.DEFAULT.font() + ": " + pHighest.getWinsTotal());
             players.remove(pHighest);
         }
     }
@@ -79,7 +83,7 @@ public class GameScore extends Score implements ScoreSave {
                     }
                 }
 
-                pw.println(playerHighest.getName() + ": " + playerHighest.getWinsTotal());
+                pw.println(playerHighest.getName() + " (" + playerHighest.getColour().name() + "): " + playerHighest.getWinsTotal());
                 players.remove(playerHighest);
             }
             

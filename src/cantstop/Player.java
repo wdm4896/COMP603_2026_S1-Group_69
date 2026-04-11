@@ -4,30 +4,24 @@
  */
 package cantstop;
 
-import java.util.*;
+import java.util.Scanner;
 /**
  *
  * @author admin
  */
 public class Player extends Person implements Turn {
     private final static int movingPiecesMax = 3;
-    private int[] posCurrent;// = new int[GameBoard.getBoardWidth()];
-    private int[] posMoving;// = new int[GameBoard.getBoardWidth()];
+    private int[] posCurrent;
+    private int[] posMoving;
     private int movingPiecesAvailable = movingPiecesMax;
     private int[] movingPieces = new int[movingPiecesMax];
     private boolean isMoving = false;
     private int claimedTotal = 0;
-    private final int[] claimedColumns = new int[Game.getWinCondition()];
+    private int[] claimedColumns;
     
     public Player(String name, Colour colour)
     {
         super(name, colour);
-    }
-    
-    @Override
-    public int[] getPosCurrent()
-    {
-        return this.posCurrent;
     }
     
     @Override
@@ -60,6 +54,7 @@ public class Player extends Person implements Turn {
     
     public void resetColumns()
     {
+        this.claimedColumns = new int[Game.getWinCondition()];
         for (int i = 0; i < this.claimedColumns.length; i++)
         {
             this.claimedColumns[i] = -1;
@@ -68,30 +63,6 @@ public class Player extends Person implements Turn {
         
         this.posCurrent = new int[GameBoard.getBoardWidth()];
         this.posMoving = new int[GameBoard.getBoardWidth()];
-    }
-    
-    @Override
-    public boolean isMoving()
-    {
-        return this.isMoving;
-    }
-    
-    @Override
-    public void setMoving(boolean isMoving)
-    {
-        this.isMoving = isMoving;
-    }
-    
-    @Override
-    public int[] getPosMoving()
-    {
-        return this.posMoving;
-    }
-    
-    public void blockColumn(int index)
-    {
-        this.posCurrent[index] = -1;
-        this.posMoving[index] = -1;
     }
     
     @Override
@@ -158,9 +129,36 @@ public class Player extends Person implements Turn {
                 this.movingPieces[movingPiecesMax - movingPiecesAvailable--] = choice;
             }
         }
+    }
         
-        
-        
+    @Override
+    public boolean isMoving()
+    {
+        return this.isMoving;
+    }
+    
+    @Override
+    public void setMoving(boolean isMoving)
+    {
+        this.isMoving = isMoving;
+    }
+    
+    @Override
+    public int[] getPosMoving()
+    {
+        return this.posMoving;
+    }
+    
+    @Override
+    public int[] getPosCurrent()
+    {
+        return this.posCurrent;
+    }
+    
+    public void blockColumn(int index)
+    {
+        this.posCurrent[index] = -1;
+        this.posMoving[index] = -1;
     }
     
     public int[] getClaimedColumns()

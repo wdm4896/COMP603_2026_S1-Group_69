@@ -4,7 +4,10 @@
  */
 package cantstop;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -17,7 +20,7 @@ public class DiceCup {
     private final static int diceTotal = 4;
     private final static int diceChosenMax = 2; // dice that can be paired
     private final static int diceCombinations = Math.combination(diceTotal, diceChosenMax);// = diceTotal / (diceTotal - diceChosenMax);
-    private Integer[][] diceCombinationsValues;
+    private Integer[][] diceChoices;
     
     private final Dice[] dice = new Dice[diceTotal];
     
@@ -43,7 +46,7 @@ public class DiceCup {
     
     private void dicePairings(int[] diceRoll)
     {
-        this.diceCombinationsValues = new Integer[diceCombinations][diceChosenMax];
+        this.diceChoices = new Integer[diceCombinations][diceChosenMax];
         
         // Create a list of dice from the integer array
         List<Integer> diceList = new ArrayList<Integer>();
@@ -61,9 +64,15 @@ public class DiceCup {
         for (int i = 0; i < diceCombinations; i++)
         {
             diceListCopy = new ArrayList<>(diceList);
-            this.diceCombinationsValues[i] = new Integer[] {diceListCopy.remove(0), diceListCopy.remove(i / diceChosenMax)};
+            this.diceChoices[i] = new Integer[] {
+                diceListCopy.remove(0),
+                diceListCopy.remove(i / diceChosenMax)
+            };
             i++;
-            this.diceCombinationsValues[i] = new Integer[] {diceListCopy.remove(0), diceListCopy.remove(0)};
+            this.diceChoices[i] = new Integer[] {
+                diceListCopy.remove(0),
+                diceListCopy.remove(0)
+            };
         }
     }
     
@@ -71,6 +80,7 @@ public class DiceCup {
             int[] movingPos,
             int[] movingPieces,
             int movingPiecesAvailable,
+            List<Integer> movingPossibility,
             GameBoard board,
             int pairingSum
     )
@@ -87,6 +97,12 @@ public class DiceCup {
         for (int piece : movingPieces)
         {
             inMovingPieces = (piece == pairingSum || inMovingPieces);
+        }
+        
+        Iterator iterMoving = movingPossibility.iterator();
+        while (iterMoving.hasNext())
+        {
+            inMovingPieces = ((int) iterMoving.next() == pairingSum || inMovingPieces);
         }
         
         // If the moving piece can't move anymore
@@ -106,7 +122,7 @@ public class DiceCup {
             return false;
         }
         
-        // Passes checks (piece is either in movingPieces or can be added to movingPossibility)
+        // Passes checks (piece is a valid movable piece)
         return true;
     }
     
@@ -121,6 +137,8 @@ public class DiceCup {
         {
             System.out.print(optionIndex++ + ") ");
             iterGroup = ((List<Integer[]>) iterChoice.next()).iterator();
+            
+            // Prints each choice
             while (iterGroup.hasNext())
             {
                 pairing = (Integer[]) iterGroup.next();
@@ -151,10 +169,10 @@ public class DiceCup {
         boolean isValidPairing;
         boolean inMovingPieces;
         
-        for (int i = 0; i < this.diceCombinationsValues.length; i++)
+        for (int i = 0; i < this.diceChoices.length; i++)
         {
             sum = 0;
-            for (int value : this.diceCombinationsValues[i])
+            for (int value : this.diceChoices[i])
             {
                 sum += value;
             }
@@ -164,6 +182,7 @@ public class DiceCup {
                     movingPos,
                     movingPieces,
                     movingPiecesAvailable - movingPossibility.size(),
+                    movingPossibility,
                     board,
                     sum
             );
@@ -185,7 +204,7 @@ public class DiceCup {
                 continue;
             }
             
-            dicePairings.add(this.diceCombinationsValues[i]);
+            dicePairings.add(this.diceChoices[i]);
             
             // If the dice pairing is not the last pairing in a group
             if (i % groupPairingSize != groupPairingSize - 1)
@@ -222,6 +241,7 @@ public class DiceCup {
         Iterator iterList = list.iterator();
         Integer[] integerArray;
         
+        // Sum all pairings and stores them in int array
         while (iterList.hasNext())
         {
             integerArray = (Integer[]) iterList.next();
@@ -238,7 +258,12 @@ public class DiceCup {
         
     }
     
-    public int[] rollTurn(int[] movingPos, int[] movingPieces, int movingPiecesAvailable, GameBoard board)
+    public int[] rollTurn(
+            int[] movingPos,
+            int[] movingPieces,
+            int movingPiecesAvailable,
+            GameBoard board
+    )
     {
         var kbinput = new Scanner(System.in);
         int[] diceRoll = rollDice();
@@ -253,12 +278,25 @@ public class DiceCup {
         
         // Pair and display all possible pairings
         dicePairings(diceRoll);
-        List<List<Integer[]>> diceChoices = dicePairingChoice(movingPos, movingPieces, movingPiecesAvailable, board);
+        List<List<Integer[]>> diceChoices = dicePairingChoice(
+                movingPos,
+                movingPieces,
+                movingPiecesAvailable,
+                board
+        );
         printChoices(diceChoices);
         
         if (diceChoices.isEmpty())
         {
             System.out.println("\nBUST!");
+            try
+            {
+                Thread.sleep(2000);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+            }
             return null;
         }
         

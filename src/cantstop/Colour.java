@@ -25,7 +25,7 @@ public enum Colour {
         this.ansi = ansi;
     }
     
-    public String getAnsi()
+    public String font()
     {
         return this.ansi;
     }
