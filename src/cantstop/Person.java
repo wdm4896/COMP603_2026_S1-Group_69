@@ -34,13 +34,13 @@ abstract class Person {
         return this.winsTotal;
     }
     
+    public void hasWon()
+    {
+        this.winsTotal++;
+    }
+    
     public Colour getColour()
     {
         return this.colour;
-    }
-    
-    public void setColour()
-    {
-        this.colour = colour;
     }
 }

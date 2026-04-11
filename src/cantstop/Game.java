@@ -40,6 +40,7 @@ public class Game {
             if (currentPlayer.getClaimedTotal() == winCondition)
             {
                 winConditionMet = true;
+                currentPlayer.hasWon();
             } else
             {
                 players.add(players.poll());
@@ -62,9 +63,26 @@ public class Game {
         }
     }
     
-    public void gameEnd()
+    public static void gameEnd(GameScore scoreBoard, Queue<Player> players)
     {
+        var kbinput = new Scanner(System.in);
+        String input;
         
+        System.out.println("\nWould you like to save all scores? [y/n]:");
+        do {
+            System.out.print(userPrompt);
+            input = kbinput.nextLine().strip().toLowerCase(); // normalise input
+            if (input.equals("y"))
+            {
+                System.out.println("\nSaving score...");
+                scoreBoard.scoresSave(players);
+            } else if (!(input.equals("y") || input.equals("n"))) // invalid input
+            {
+                System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
+            }
+        } while (!(input.equals("y") || input.equals("n")));
+        
+        System.out.println("\nThanks for playing!");
     }
     
     public static Player addPlayer()
@@ -121,6 +139,7 @@ public class Game {
     public static void main(String[] args) {
         Queue<Player> players = new LinkedList<Player>();
         var kbinput = new Scanner(System.in);
+        var scoreBoard = new GameScore();
         
         // Add players
         String input = "";
@@ -143,7 +162,8 @@ public class Game {
         {
             gameStart(players);
             do
-            {    
+            {
+                scoreBoard.scoresDisplay(players);
                 System.out.print("\nWould you like to play again? [y/n]:\n" + userPrompt);
                 input = kbinput.nextLine().strip().toLowerCase(); // normalise input
                 
@@ -156,5 +176,9 @@ public class Game {
                 }
             } while (!(input.equals("y") || input.equals("n")));
         } while (play);
+        
+        gameEnd(scoreBoard, players);
+        
+        kbinput.close();
     }
 }
