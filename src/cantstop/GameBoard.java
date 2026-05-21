@@ -6,34 +6,42 @@ package cantstop;
 
 import java.util.Iterator;
 import java.util.Queue;
+import java.lang.Math;
 /**
  *
  * @author admin
  */
 public class GameBoard extends Board {
-    private final static int columnMin = DiceCup.getDiceValueMin() * 2;
-    private final static int columnMax = DiceCup.getDiceValueMax() * 2;
-    private final static int boardWidth = columnMax - columnMin + 1; // include both ends of the board
-    private final static int lengthMin = 3;
-    private final static int lengthMax = 13;
+    private final static int COLUMN_MIN = DiceCup.getDiceValueMin() * 2;
+    private final static int COLUMN_MAX = DiceCup.getDiceValueMax() * 2;
+    private final static int BOARD_WIDTH = COLUMN_MAX - COLUMN_MIN + 1; // include both ends of the board
+    private final static int LENGTH_MIN = 3;
+    private final static int LENGTH_MAX = 13;
     
-    private final static int[] columnValues = new int[boardWidth];
-    private final static int[] columnSizes = new int[boardWidth];
-    private final boolean[] columnClaimed = new boolean[boardWidth];
+    private final static int[] columnValues = new int[BOARD_WIDTH];
+    private final static int[] columnSizes = new int[BOARD_WIDTH];
+    private final boolean[] columnClaimed = new boolean[BOARD_WIDTH];
     
     public GameBoard()
     {
         // Generate game board
-        int step = 2 * (lengthMax - lengthMin) / (columnMax - columnMin);
-        int size = lengthMin;
-        int value = columnMin;
-        for (int i = 0; i < boardWidth; i++)
+        int valueMiddle = (COLUMN_MAX + COLUMN_MIN) / 2;
+        float size;
+        int value = COLUMN_MIN;
+        for (int i = 0; i < BOARD_WIDTH; i++)
         {
+            // Set sizes based on equation https://www.desmos.com/calculator/ynwigw058k
+            if (i <= BOARD_WIDTH / 2)
+            {
+                size = i * ((float) (LENGTH_MAX - LENGTH_MIN) / (valueMiddle - COLUMN_MIN)) + LENGTH_MIN;
+            } else
+            {
+                size = (i - BOARD_WIDTH / 2) * -((float) (LENGTH_MAX - LENGTH_MIN) / (valueMiddle - COLUMN_MIN)) + LENGTH_MAX;
+            }
+            
             columnValues[i] = value++;
-            columnSizes[i] = size;
+            columnSizes[i] = Math.round(size);
             columnClaimed[i] = false;
-            size += step;
-            if (size >= lengthMax) { step *= -1; }
         }
     }
     
@@ -117,7 +125,7 @@ public class GameBoard extends Board {
             player = (Player) iterPlayers.next();
             
             // Forcibly set all claimed column values to -1
-            for (int i = 0; i < boardWidth; i++)
+            for (int i = 0; i < BOARD_WIDTH; i++)
             {
                 if (this.columnClaimed[i])
                 {
@@ -134,12 +142,12 @@ public class GameBoard extends Board {
     
     public int getColumnMin()
     {
-        return columnMin;
+        return COLUMN_MIN;
     }
     
     public static int getBoardWidth()
     {
-        return boardWidth;
+        return BOARD_WIDTH;
     }
     
     public void setColumnClaimed(int index, boolean claimed)

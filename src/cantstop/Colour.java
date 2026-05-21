@@ -18,7 +18,7 @@ public enum Colour {
     PURPLE("\u001B[35m");
 
     
-    private String ansi;
+    private final String ansi;
     
     private Colour(String ansi)
     {

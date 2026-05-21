@@ -14,29 +14,29 @@ import java.util.Scanner;
  * @author admin
  */
 public class DiceCup {
-    private final static int diceValueMin = 1;
-    private final static int diceValueMax = 6;
+    private final static int DICE_VALUE_MIN = 1;
+    private final static int DICE_VALUE_MAX = 4;
     
-    private final static int diceTotal = 4;
-    private final static int diceChosenMax = 2; // dice that can be paired
-    private final static int diceCombinations = Math.combination(diceTotal, diceChosenMax);// = diceTotal / (diceTotal - diceChosenMax);
+    private final static int DICE_TOTAL = 4;
+    private final static int DICE_CHOSEN_MAX = 2; // dice that can be paired
+    private final static int DICE_COMBINATIONS = Math.combination(DICE_TOTAL, DICE_CHOSEN_MAX);// = diceTotal / (diceTotal - diceChosenMax);
     private Integer[][] diceChoices;
     
-    private final Dice[] dice = new Dice[diceTotal];
+    private final Dice[] dice = new Dice[DICE_TOTAL];
     
     public DiceCup()
     {
-        for (int i = 0; i < diceTotal; i++)
+        for (int i = 0; i < DICE_TOTAL; i++)
         { 
-            dice[i] = new Dice(diceValueMin, diceValueMax);
+            dice[i] = new Dice(DICE_VALUE_MIN, DICE_VALUE_MAX);
         }
     }
     
     public int[] rollDice()
     {
-        int[] diceValues = new int[diceTotal];
+        int[] diceValues = new int[DICE_TOTAL];
         
-        for (int i = 0; i < diceTotal; i++)
+        for (int i = 0; i < DICE_TOTAL; i++)
         {
             diceValues[i] = dice[i].roll();
         }
@@ -46,7 +46,7 @@ public class DiceCup {
     
     private void dicePairings(int[] diceRoll)
     {
-        this.diceChoices = new Integer[diceCombinations][diceChosenMax];
+        this.diceChoices = new Integer[DICE_COMBINATIONS][DICE_CHOSEN_MAX];
         
         // Create a list of dice from the integer array
         List<Integer> diceList = new ArrayList<Integer>();
@@ -61,12 +61,12 @@ public class DiceCup {
         // Anything higher is out of the scope of this project
         // And is too difficult...
         List<Integer> diceListCopy;
-        for (int i = 0; i < diceCombinations; i++)
+        for (int i = 0; i < DICE_COMBINATIONS; i++)
         {
             diceListCopy = new ArrayList<>(diceList);
             this.diceChoices[i] = new Integer[] {
                 diceListCopy.remove(0),
-                diceListCopy.remove(i / diceChosenMax)
+                diceListCopy.remove(i / DICE_CHOSEN_MAX)
             };
             i++;
             this.diceChoices[i] = new Integer[] {
@@ -164,7 +164,7 @@ public class DiceCup {
         List<Integer[]> dicePairings = new ArrayList<Integer[]>();
         List<Integer> movingPossibility = new ArrayList<Integer>();
      
-        int groupPairingSize = diceTotal / diceChosenMax;
+        int groupPairingSize = DICE_TOTAL / DICE_CHOSEN_MAX;
         int sum;
         boolean isValidPairing;
         boolean inMovingPieces;
@@ -246,7 +246,7 @@ public class DiceCup {
         {
             integerArray = (Integer[]) iterList.next();
             
-            for (int dice = 0; dice < diceChosenMax; dice++)
+            for (int dice = 0; dice < DICE_CHOSEN_MAX; dice++)
             {
                 choiceOutput[index] += integerArray[dice];
             }
@@ -305,7 +305,7 @@ public class DiceCup {
         int saveValue = -1;
         do
         {
-            System.out.print(Game.userPrompt);
+            System.out.print(Game.USER_PROMPT);
             try
             {
                 saveValue = kbinput.nextInt();
@@ -325,11 +325,11 @@ public class DiceCup {
     
     public static int getDiceValueMin()
     {
-        return diceValueMin;
+        return DICE_VALUE_MIN;
     }
     
     public static int getDiceValueMax()
     {
-        return diceValueMax;
+        return DICE_VALUE_MAX;
     }
 }

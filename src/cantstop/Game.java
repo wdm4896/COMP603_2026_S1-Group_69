@@ -13,9 +13,9 @@ import java.util.Queue;
  * @author admin
  */
 public class Game {
-    private final static int playersMax = 4;
-    private final static int winCondition = 3;
-    public final static String userPrompt = "> ";
+    private final static int PLAYERS_MAX = 4;
+    private final static int WIN_CONDITION = 3;
+    public final static String USER_PROMPT = "> ";
     
     public static void gameStart(Queue<Player> players)
     {
@@ -40,7 +40,7 @@ public class Game {
             
             board.clearColumnsClaimed(players);
             
-            if (currentPlayer.getClaimedTotal() == winCondition)
+            if (currentPlayer.getClaimedTotal() >= WIN_CONDITION)
             {
                 winConditionMet = true;
                 currentPlayer.hasWon();
@@ -73,7 +73,7 @@ public class Game {
         
         System.out.println("\nWould you like to save all scores? [y/n]:");
         do {
-            System.out.print(userPrompt);
+            System.out.print(USER_PROMPT);
             input = kbinput.nextLine().strip().toLowerCase(); // normalise input
             if (input.equals("y"))
             {
@@ -103,7 +103,7 @@ public class Game {
         
         // Set player name
         Scanner kbinput = new Scanner(System.in);
-        System.out.print("\nWhat is your name?\n" + userPrompt);
+        System.out.print("\nWhat is your name?\n" + USER_PROMPT);
         name = kbinput.nextLine();
         
         // Prompt for colour input
@@ -120,7 +120,7 @@ public class Game {
         int colourIndex = -1;
         do
         {
-            System.out.print(userPrompt);
+            System.out.print(USER_PROMPT);
             try
             {
                 colourIndex = kbinput.nextInt();
@@ -158,7 +158,7 @@ public class Game {
         // Add players
         String input = "";
         do {
-            System.out.print("Would you like to add a new player? [y/n]:\n" + userPrompt);
+            System.out.print("Would you like to add a new player? [y/n]:\n" + USER_PROMPT);
             input = kbinput.nextLine().strip().toLowerCase(); // normalise input
             if (input.equals("y"))
             {
@@ -167,7 +167,7 @@ public class Game {
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
             }
-        } while (!input.equals("n") && players.size() < playersMax);
+        } while (!input.equals("n") && players.size() < PLAYERS_MAX);
         if (players.size() <= 0) {
             kbinput.close();
             System.exit(0);
@@ -200,7 +200,7 @@ public class Game {
                 {
                     Thread.currentThread().interrupt();
                 }
-                System.out.print("\nWould you like to play again? [y/n]:\n" + userPrompt);
+                System.out.print("\nWould you like to play again? [y/n]:\n" + USER_PROMPT);
                 input = kbinput.nextLine().strip().toLowerCase(); // normalise input
                 
                 if (input.equals("y") || input.equals("n")) // valid input
@@ -220,6 +220,6 @@ public class Game {
         
     public static int getWinCondition()
     {
-        return winCondition;
+        return WIN_CONDITION;
     }
 }

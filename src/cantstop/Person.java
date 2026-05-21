@@ -10,7 +10,7 @@ package cantstop;
  */
 abstract class Person {
     private String name;
-    private Colour colour;
+    private final Colour colour;
     private int winsTotal = 0;
     
     public Person(String name, Colour colour)

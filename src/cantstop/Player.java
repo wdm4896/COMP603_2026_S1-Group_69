@@ -10,11 +10,11 @@ import java.util.Scanner;
  * @author admin
  */
 public class Player extends Person implements Turn {
-    private final static int movingPiecesMax = 3;
+    private final static int MOVING_PIECES_MAX = 3;
     private int[] posCurrent;
     private int[] posMoving;
-    private int movingPiecesAvailable = movingPiecesMax;
-    private int[] movingPieces = new int[movingPiecesMax];
+    private int movingPiecesAvailable = MOVING_PIECES_MAX;
+    private int[] movingPieces = new int[MOVING_PIECES_MAX];
     private boolean isMoving = false;
     private int claimedTotal = 0;
     private int[] claimedColumns;
@@ -41,20 +41,21 @@ public class Player extends Person implements Turn {
             }
         }
         
-        movingPieces = new int[movingPiecesMax];
-        this.movingPiecesAvailable = movingPiecesMax;
+        movingPieces = new int[MOVING_PIECES_MAX];
+        this.movingPiecesAvailable = MOVING_PIECES_MAX;
     }
     
     public void bust()
     {
         this.posMoving = this.posCurrent.clone();
-        movingPieces = new int[movingPiecesMax];
-        this.movingPiecesAvailable = movingPiecesMax;
+        movingPieces = new int[MOVING_PIECES_MAX];
+        this.movingPiecesAvailable = MOVING_PIECES_MAX;
     }
     
     public void resetColumns()
     {
-        this.claimedColumns = new int[Game.getWinCondition()];
+        int claimedColumnsTotal = Game.getWinCondition() + MOVING_PIECES_MAX - 1;
+        this.claimedColumns = new int[claimedColumnsTotal];
         for (int i = 0; i < this.claimedColumns.length; i++)
         {
             this.claimedColumns[i] = -1;
@@ -73,7 +74,7 @@ public class Player extends Person implements Turn {
         // Ask to continue turn
         String input = "";
         do {
-            System.out.print("\nWould you like to roll? [Y/n]:\n" + Game.userPrompt);
+            System.out.print("\nWould you like to roll? [Y/n]:\n" + Game.USER_PROMPT);
             input = kbinput.nextLine().strip().toLowerCase(); // normalise input
             if (input.equals("n"))
             {
@@ -126,7 +127,7 @@ public class Player extends Person implements Turn {
             
             if (!inMovingPieces && this.movingPiecesAvailable > 0)
             {
-                this.movingPieces[movingPiecesMax - movingPiecesAvailable--] = choice;
+                this.movingPieces[MOVING_PIECES_MAX - movingPiecesAvailable--] = choice;
             }
         }
     }
@@ -183,6 +184,6 @@ public class Player extends Person implements Turn {
     
     public int getMovingPiecesMax()
     {
-        return movingPiecesMax;
+        return MOVING_PIECES_MAX;
     }
 }
