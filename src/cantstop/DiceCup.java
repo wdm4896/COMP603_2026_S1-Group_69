@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class DiceCup {
     private final static int DICE_VALUE_MIN = 1;
-    private final static int DICE_VALUE_MAX = 4;
+    private final static int DICE_VALUE_MAX = 6;
     
     private final static int DICE_TOTAL = 4;
     private final static int DICE_CHOSEN_MAX = 2; // dice that can be paired
@@ -153,10 +153,11 @@ public class DiceCup {
         }
     }
     
-    private List<List<Integer[]>> dicePairingChoice(
+    public List<List<Integer[]>> dicePairingChoice(
             int[] movingPos,
             int[] movingPieces,
             int movingPiecesAvailable,
+            int[] diceRoll,
             GameBoard board
     )
     {
@@ -169,6 +170,9 @@ public class DiceCup {
         boolean isValidPairing;
         boolean inMovingPieces;
         
+        dicePairings(diceRoll); // Grab all possible pairings with no validation
+        
+        // Check each pairing to see if it is valid
         for (int i = 0; i < this.diceChoices.length; i++)
         {
             sum = 0;
@@ -230,11 +234,11 @@ public class DiceCup {
             dicePairings = new ArrayList<Integer[]>();
             movingPossibility = new ArrayList<Integer>();
         }
-        
+
         return diceChoices;
     }
     
-    private int[] choiceToOutput(List<Integer[]> list)
+    public int[] choiceToOutput(List<Integer[]> list)
     {
         int[] choiceOutput = new int[list.size()];
         int index = 0;
@@ -277,11 +281,11 @@ public class DiceCup {
         System.out.println("");
         
         // Pair and display all possible pairings
-        dicePairings(diceRoll);
         List<List<Integer[]>> diceChoices = dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
+                diceRoll,
                 board
         );
         printChoices(diceChoices);
