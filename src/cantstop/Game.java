@@ -5,7 +5,6 @@
 package cantstop;
 
 import java.util.Scanner;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 /**
@@ -17,56 +16,16 @@ public class Game {
     private final static int WIN_CONDITION = 3;
     public final static String USER_PROMPT = "> ";
     
-    public static void gameStart(Queue<Player> players)
+    private static Queue<Player> players;
+    private static GameRound roundCurrent;
+    
+    private static void gameStart()
     {
-        var board = new GameBoard();
-        var diceCup = new DiceCup();
-        
-        Player currentPlayer = null;
-        boolean winConditionMet = false;
-        
-        gameReset(players);
-        
-        // Play game as long as someone hasn't won yet
-        while (!winConditionMet)
-        {
-            currentPlayer = players.peek();
-            currentPlayer.setMoving(true);
-            
-            do {
-                board.boardDraw(players);
-                currentPlayer.haveTurn(board, diceCup);
-            } while (currentPlayer.isMoving());
-            
-            board.clearColumnsClaimed(players);
-            
-            if (currentPlayer.getClaimedTotal() >= WIN_CONDITION)
-            {
-                winConditionMet = true;
-                currentPlayer.hasWon();
-            } else
-            {
-                players.add(players.poll());
-            }
-        }
-        
-        board.boardDraw(players);
-        System.out.println("\n" + currentPlayer.getColour().font() + currentPlayer.getName() + Colour.DEFAULT.font() + " wins!!!");
+        roundCurrent = new GameRound(players);
+        roundCurrent.play();        
     }
     
-    public static void gameReset(Queue<Player> players)
-    {
-        Iterator iterPlayers = players.iterator();
-        Player player;
-        
-        while (iterPlayers.hasNext())
-        {
-            player = (Player) iterPlayers.next();
-            player.resetColumns();
-        }
-    }
-    
-    public static void gameEnd(GameScore scoreBoard, Queue<Player> players)
+    private static void gameEnd(GameScore scoreBoard)
     {
         var kbinput = new Scanner(System.in);
         String input;
@@ -96,7 +55,7 @@ public class Game {
         System.out.println("\nThanks for playing!");
     }
     
-    public static Player addPlayer()
+    private static Player addPlayer()
     {
         String name;
         Colour colour;
@@ -151,7 +110,7 @@ public class Game {
     }
     
     public static void main(String[] args) {
-        Queue<Player> players = new LinkedList<Player>();
+        players = new LinkedList<Player>();
         var kbinput = new Scanner(System.in);
         var scoreBoard = new GameScore();
         
@@ -186,7 +145,7 @@ public class Game {
             {
                 Thread.currentThread().interrupt();
             }
-            gameStart(players);
+            gameStart();
             
             // Play again
             do
@@ -213,7 +172,7 @@ public class Game {
             } while (!(input.equals("y") || input.equals("n")));
         } while (play);
         
-        gameEnd(scoreBoard, players);
+        gameEnd(scoreBoard);
         
         kbinput.close();
     }
