@@ -6,6 +6,7 @@ package cantstop;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -62,7 +63,7 @@ public class DiceCupTest {
     
     @Before
     public void setUp() {
-        board = new GameBoard();
+        board = new GameBoard(new LinkedList<Player>());
         movingPos = new int[GameBoard.getBoardWidth()];
         movingPieces = new int[MOVING_PIECES_MAX];
         diceRoll = new int[]{1, 2, 3, 4};

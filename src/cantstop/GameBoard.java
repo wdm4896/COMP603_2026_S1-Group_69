@@ -22,8 +22,13 @@ public class GameBoard {
     private final static int[] columnSizes = new int[BOARD_WIDTH];
     private final boolean[] columnClaimed = new boolean[BOARD_WIDTH];
     
-    public GameBoard()
+    private final Queue<Player> players;
+    
+    public GameBoard(Queue<Player> players)
     {
+        this.players = players;
+        resetPlayers();
+        
         // Generate game board
         int valueMiddle = (COLUMN_MAX + COLUMN_MIN) / 2;
         float size;
@@ -42,6 +47,18 @@ public class GameBoard {
             columnValues[i] = value++;
             columnSizes[i] = Math.round(size);
             columnClaimed[i] = false;
+        }
+    }
+    
+    private void resetPlayers()
+    {
+        Iterator iterPlayers = players.iterator();
+        Player player;
+        
+        while (iterPlayers.hasNext())
+        {
+            player = (Player) iterPlayers.next();
+            player.resetColumns();
         }
     }
     
@@ -83,6 +100,11 @@ public class GameBoard {
     public static int getBoardWidth()
     {
         return BOARD_WIDTH;
+    }
+    
+    public static int getLengthMax()
+    {
+        return LENGTH_MAX;
     }
     
     public void setColumnClaimed(int index, boolean claimed)

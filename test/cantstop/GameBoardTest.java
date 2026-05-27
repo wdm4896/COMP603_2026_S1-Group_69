@@ -26,7 +26,7 @@ public class GameBoardTest {
     
     @Before
     public void setUp() {
-        board = new GameBoard();
+        board = new GameBoard(new LinkedList<Player>());
     }
 
     /**
@@ -67,6 +67,15 @@ public class GameBoardTest {
     public void testGetBoardWidth() {
         System.out.println("getBoardWidth");
         assertEquals(11, GameBoard.getBoardWidth());
+    }
+    
+    /**
+     * Test of getLengthMax method, of class GameBoard.
+     */
+    @Test
+    public void testGetLengthMax() {
+        System.out.println("getLengthMax");
+        assertEquals(13, GameBoard.getLengthMax());
     }
     
     /**

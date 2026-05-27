@@ -4,6 +4,8 @@
  */
 package cantstop;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,6 +17,7 @@ public class Game {
     private final static int PLAYERS_MAX = 4;
     private final static int WIN_CONDITION = 3;
     public final static String USER_PROMPT = "> ";
+    private final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     
     private static Queue<Player> players;
     private static GameRound roundCurrent;
@@ -180,5 +183,15 @@ public class Game {
     public static int getWinCondition()
     {
         return WIN_CONDITION;
+    }
+    
+    public static int getScreenWidth()
+    {
+        return (int) SCREEN_SIZE.getWidth();
+    }
+    
+    public static int getScreenHeight()
+    {
+        return (int) SCREEN_SIZE.getHeight();
     }
 }

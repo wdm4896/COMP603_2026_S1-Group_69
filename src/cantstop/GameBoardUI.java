@@ -21,7 +21,7 @@ abstract class GameBoardUI extends JPanel {
         this.players = players;
     }
     
-    public abstract void boardDraw();
+    public abstract void drawBoard();
     
     public GameBoard getBoard()
     {

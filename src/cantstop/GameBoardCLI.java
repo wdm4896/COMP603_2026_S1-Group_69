@@ -18,11 +18,11 @@ public class GameBoardCLI extends GameBoardUI {
     }
     
     @Override
-    public void boardDraw()
+    public void drawBoard()
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); // "clear" the screen...
-        lineDraw("Value", this.getBoard().getColumnValues(), null);
-        lineDraw("Size", this.getBoard().getColumnSizes(), null);
+        drawLine("Value", this.getBoard().getColumnValues(), null);
+        drawLine("Size", this.getBoard().getColumnSizes(), null);
         
         Iterator iterPlayers = this.getPlayers().iterator();
         Player player;
@@ -34,14 +34,14 @@ public class GameBoardCLI extends GameBoardUI {
             player = (Player) iterPlayers.next();
             if (player.isMoving()) { playerMoving = player; }
             System.out.print(player.getColour().font());
-            lineDraw(player.getName(), player.getPosCurrent(), player);
+            drawLine(player.getName(), player.getPosCurrent(), player);
         }
         
         // Print moving player position
         if (playerMoving != null)
         {
             System.out.println("Current moving player: " + playerMoving.getColour().font() + playerMoving.getName() + Colour.DEFAULT.font());
-            lineDraw(
+            drawLine(
                     playerMoving.getName() + " (M)", 
                     playerMoving.getPosMoving(), 
                     playerMoving
@@ -62,7 +62,7 @@ public class GameBoardCLI extends GameBoardUI {
         }
     }
     
-    private void lineDraw(String name, int[] columns, Player player)
+    private void drawLine(String name, int[] columns, Player player)
     {
         System.out.print(String.format("%-15s", name));
         for (int column = 0; column < columns.length; column++)
