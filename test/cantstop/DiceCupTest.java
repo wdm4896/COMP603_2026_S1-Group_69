@@ -28,6 +28,7 @@ public class DiceCupTest {
     private int[] movingPieces;
     private int[] diceRoll;
     private int movingPiecesAvailable;
+    private Player player;
     
     public DiceCupTest() {
     }
@@ -64,6 +65,7 @@ public class DiceCupTest {
     @Before
     public void setUp() {
         board = new GameBoard(new LinkedList<Player>());
+        player = new Player("", Colour.RED);
         movingPos = new int[GameBoard.getBoardWidth()];
         movingPieces = new int[MOVING_PIECES_MAX];
         diceRoll = new int[]{1, 2, 3, 4};
@@ -97,13 +99,14 @@ public class DiceCupTest {
         };
         int rows = 3;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(rows, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -126,13 +129,14 @@ public class DiceCupTest {
         };
         int rows = 4;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(rows, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -152,13 +156,14 @@ public class DiceCupTest {
         };
         int rows = 2;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(rows, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -178,13 +183,14 @@ public class DiceCupTest {
         };
         int row = 2;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(row, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -204,13 +210,14 @@ public class DiceCupTest {
         };
         int row = 2;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(row, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -229,13 +236,14 @@ public class DiceCupTest {
         Integer[][] pairings = {};
         int rows = 0;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(rows, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -259,13 +267,14 @@ public class DiceCupTest {
         };
         int rows = 4;
         
-        List<List<Integer[]>> result = diceCup.dicePairingChoice(
+        diceCup.dicePairingChoice(
                 movingPos,
                 movingPieces,
                 movingPiecesAvailable,
                 diceRoll,
                 board
         );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
         assertEquals(rows, result.size());
         
         dicePairingChoiceListCheck(result, pairings);
@@ -278,11 +287,18 @@ public class DiceCupTest {
     public void testChoiceToOutput_1() {
         System.out.println("choiceToOutput - 1 value");
         
-        List<Integer[]> pairingsInput = new ArrayList<>();
-        pairingsInput.add(new Integer[]{3, 4});
+        board.setColumnClaimed(7 - 2, true);
+        diceCup.dicePairingChoice(
+                movingPos,
+                movingPieces,
+                movingPiecesAvailable,
+                diceRoll,
+                board
+        );
         
-        int[] result = diceCup.choiceToOutput(pairingsInput);
-        int[] resultExp = {7};
+        int selection = 1;
+        int[] result = diceCup.choiceToOutput(selection);
+        int[] resultExp = {3};
         
         for (int i = 0; i < result.length; i++)
         {
@@ -294,11 +310,16 @@ public class DiceCupTest {
     public void testChoiceToOutput_2() {
         System.out.println("choiceToOutput - 2 values");
         
-        List<Integer[]> pairingsInput = new ArrayList<>();
-        pairingsInput.add(new Integer[]{1, 2});
-        pairingsInput.add(new Integer[]{3, 4});
+        diceCup.dicePairingChoice(
+                movingPos,
+                movingPieces,
+                movingPiecesAvailable,
+                diceRoll,
+                board
+        );
         
-        int[] result = diceCup.choiceToOutput(pairingsInput);
+        int selection = 1;
+        int[] result = diceCup.choiceToOutput(selection);
         int[] resultExp = {3, 7};
         
         for (int i = 0; i < result.length; i++)

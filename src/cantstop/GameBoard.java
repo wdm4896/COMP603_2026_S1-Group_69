@@ -82,6 +82,11 @@ public class GameBoard {
         }
     }
     
+    public Queue<Player> getPlayers()
+    {
+        return this.players;
+    }
+    
     public int[] getColumnValues()
     {
         return columnValues;

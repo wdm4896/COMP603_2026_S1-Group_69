@@ -7,7 +7,6 @@ package cantstop;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  *
@@ -20,7 +19,8 @@ public class DiceCup {
     private final static int DICE_TOTAL = 4;
     private final static int DICE_CHOSEN_MAX = 2; // dice that can be paired
     private final static int DICE_COMBINATIONS = Math.combination(DICE_TOTAL, DICE_CHOSEN_MAX);// = diceTotal / (diceTotal - diceChosenMax);
-    private Integer[][] diceChoices;
+    private Integer[][] diceChoicesAll;
+    private List<List<Integer[]>> diceChoicesFiltered;
     
     private final Dice[] dice = new Dice[DICE_TOTAL];
     
@@ -46,10 +46,10 @@ public class DiceCup {
     
     private void dicePairings(int[] diceRoll)
     {
-        this.diceChoices = new Integer[DICE_COMBINATIONS][DICE_CHOSEN_MAX];
+        this.diceChoicesAll = new Integer[DICE_COMBINATIONS][DICE_CHOSEN_MAX];
         
         // Create a list of dice from the integer array
-        List<Integer> diceList = new ArrayList<Integer>();
+        List<Integer> diceList = new ArrayList<>();
         
         for (int die : diceRoll)
         {
@@ -64,12 +64,12 @@ public class DiceCup {
         for (int i = 0; i < DICE_COMBINATIONS; i++)
         {
             diceListCopy = new ArrayList<>(diceList);
-            this.diceChoices[i] = new Integer[] {
+            this.diceChoicesAll[i] = new Integer[] {
                 diceListCopy.remove(0),
                 diceListCopy.remove(i / DICE_CHOSEN_MAX)
             };
             i++;
-            this.diceChoices[i] = new Integer[] {
+            this.diceChoicesAll[i] = new Integer[] {
                 diceListCopy.remove(0),
                 diceListCopy.remove(0)
             };
@@ -126,34 +126,7 @@ public class DiceCup {
         return true;
     }
     
-    private void printChoices(List<List<Integer[]>> diceChoices)
-    {
-        Iterator iterChoice = diceChoices.iterator();
-        Iterator iterGroup;
-        Integer[] pairing;
-        
-        int optionIndex = 1;
-        while (iterChoice.hasNext())
-        {
-            System.out.print(optionIndex++ + ") ");
-            iterGroup = ((List<Integer[]>) iterChoice.next()).iterator();
-            
-            // Prints each choice
-            while (iterGroup.hasNext())
-            {
-                pairing = (Integer[]) iterGroup.next();
-                System.out.print("(" + pairing[0]);
-                for (int i = 1; i < pairing.length; i++)
-                {
-                    System.out.print(", " + pairing[i]);
-                }
-                System.out.print(") ");
-            }
-            System.out.println("");
-        }
-    }
-    
-    public List<List<Integer[]>> dicePairingChoice(
+    public void dicePairingChoice(
             int[] movingPos,
             int[] movingPieces,
             int movingPiecesAvailable,
@@ -161,9 +134,9 @@ public class DiceCup {
             GameBoard board
     )
     {
-        List<List<Integer[]>> diceChoices = new ArrayList<>();
-        List<Integer[]> dicePairings = new ArrayList<Integer[]>();
-        List<Integer> movingPossibility = new ArrayList<Integer>();
+        this.diceChoicesFiltered = new ArrayList<>();
+        List<Integer[]> dicePairings = new ArrayList<>();
+        List<Integer> movingPossibility = new ArrayList<>();
      
         int groupPairingSize = DICE_TOTAL / DICE_CHOSEN_MAX;
         int sum;
@@ -173,10 +146,10 @@ public class DiceCup {
         dicePairings(diceRoll); // Grab all possible pairings with no validation
         
         // Check each pairing to see if it is valid
-        for (int i = 0; i < this.diceChoices.length; i++)
+        for (int i = 0; i < this.diceChoicesAll.length; i++)
         {
             sum = 0;
-            for (int value : this.diceChoices[i])
+            for (int value : this.diceChoicesAll[i])
             {
                 sum += value;
             }
@@ -201,14 +174,14 @@ public class DiceCup {
                         i--;
                     }
                     
-                    diceChoices.add(dicePairings);
-                    dicePairings = new ArrayList<Integer[]>();
-                    movingPossibility = new ArrayList<Integer>();
+                    this.diceChoicesFiltered.add(dicePairings);
+                    dicePairings = new ArrayList<>();
+                    movingPossibility = new ArrayList<>();
                 }
                 continue;
             }
             
-            dicePairings.add(this.diceChoices[i]);
+            dicePairings.add(this.diceChoicesAll[i]);
             
             // If the dice pairing is not the last pairing in a group
             if (i % groupPairingSize != groupPairingSize - 1)
@@ -230,16 +203,15 @@ public class DiceCup {
             }
             
             // Add the pairings to the list of possible options
-            diceChoices.add(dicePairings);
-            dicePairings = new ArrayList<Integer[]>();
-            movingPossibility = new ArrayList<Integer>();
+            this.diceChoicesFiltered.add(dicePairings);
+            dicePairings = new ArrayList<>();
+            movingPossibility = new ArrayList<>();
         }
-
-        return diceChoices;
     }
     
-    public int[] choiceToOutput(List<Integer[]> list)
+    public int[] choiceToOutput(int choice)
     {
+        List<Integer[]> list = this.diceChoicesFiltered.get(choice - 1);
         int[] choiceOutput = new int[list.size()];
         int index = 0;
         Iterator iterList = list.iterator();
@@ -250,9 +222,9 @@ public class DiceCup {
         {
             integerArray = (Integer[]) iterList.next();
             
-            for (int dice = 0; dice < DICE_CHOSEN_MAX; dice++)
+            for (int diceIndex = 0; diceIndex < DICE_CHOSEN_MAX; diceIndex++)
             {
-                choiceOutput[index] += integerArray[dice];
+                choiceOutput[index] += integerArray[diceIndex];
             }
             
             index++;
@@ -262,69 +234,29 @@ public class DiceCup {
         
     }
     
-    public int[] rollTurn(
-            int[] movingPos,
-            int[] movingPieces,
-            int movingPiecesAvailable,
+    public boolean rollTurn(
+            Player player,
             GameBoard board
     )
     {
-        var kbinput = new Scanner(System.in);
         int[] diceRoll = rollDice();
         
-        // Print dice
-        System.out.print("Dice Roll: " + diceRoll[0]);
-        for (int dice = 1; dice < diceRoll.length; dice++)
-        {
-            System.out.print(", " + diceRoll[dice]);
-        }
-        System.out.println("");
-        
-        // Pair and display all possible pairings
-        List<List<Integer[]>> diceChoices = dicePairingChoice(
-                movingPos,
-                movingPieces,
-                movingPiecesAvailable,
+        // Pair and keep all possible pairings
+        dicePairingChoice(
+                player.getPosMoving(),
+                player.getMovingPieces(),
+                player.getMovingPiecesAvailable(),
                 diceRoll,
                 board
         );
-        printChoices(diceChoices);
-        
-        if (diceChoices.isEmpty())
-        {
-            System.out.println("\nBUST!");
-            try
-            {
-                Thread.sleep(2000);
-            }
-            catch (InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-            }
-            return null;
-        }
-        
-        // Save values to movement position
-        System.out.println("Which dice do you wish to select?");
-        int saveValue = -1;
-        do
-        {
-            System.out.print(Game.USER_PROMPT);
-            try
-            {
-                saveValue = kbinput.nextInt();
-            } catch(java.util.InputMismatchException e)
-            {
-                kbinput.nextLine();
-            }
 
-            if (!(1 <= saveValue && saveValue <= diceChoices.size()))
-            {
-                System.out.println("Invalid input. Please input a value between 1 and " + (diceChoices.size()) + "...");
-            }
-        } while (!(1 <= saveValue && saveValue <= diceChoices.size()));
-        
-        return choiceToOutput(diceChoices.get(saveValue - 1));
+        // Return whether the player can make a move or not
+        return !this.diceChoicesFiltered.isEmpty();
+    }
+
+    public List<List<Integer[]>> getDiceChoicesFiltered()
+    {
+        return this.diceChoicesFiltered;
     }
     
     public static int getDiceValueMin()

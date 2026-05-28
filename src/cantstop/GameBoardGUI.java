@@ -23,6 +23,7 @@ public class GameBoardGUI extends GameBoardUI {
     private final static int PANEL_HEIGHT = Game.getScreenHeight() - SCREEN_PADDING;
     private final static int BOARD_WIDTH = GameBoard.getBoardWidth();
     private final static int BOARD_HEIGHT = GameBoard.getLengthMax() + 2; // +2 to account for text
+    
     private final static Image BG_IMAGE = new ImageIcon("./resources/board_background.png").getImage().getScaledInstance(PANEL_WIDTH, PANEL_HEIGHT, Image.SCALE_SMOOTH);
     private final static String[] LOGO_TEXT = {"C", "A", "N", "T", "", "", "", "S", "T", "O", "P"}; // Honestly just for a bit of fun
     private final int[] columnSizes = this.getBoard().getColumnSizes();

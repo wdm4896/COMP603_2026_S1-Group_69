@@ -43,6 +43,8 @@ public class Player extends Person implements Turn {
         
         movingPieces = new int[MOVING_PIECES_MAX];
         this.movingPiecesAvailable = MOVING_PIECES_MAX;
+        
+        this.isMoving = false;
     }
     
     public void bust()
@@ -50,6 +52,7 @@ public class Player extends Person implements Turn {
         this.posMoving = this.posCurrent.clone();
         movingPieces = new int[MOVING_PIECES_MAX];
         this.movingPiecesAvailable = MOVING_PIECES_MAX;
+        this.isMoving = false;
     }
     
     public void resetColumns()
@@ -67,43 +70,8 @@ public class Player extends Person implements Turn {
     }
     
     @Override
-    public void haveTurn(GameBoard board, DiceCup diceCup)
+    public void saveMoving(int[] diceChoice, GameBoard board)
     {
-        var kbinput = new Scanner(System.in);
-        
-        // Ask to continue turn
-        String input = "";
-        do {
-            System.out.print("\nWould you like to roll? [Y/n]:\n" + Game.USER_PROMPT);
-            input = kbinput.nextLine().strip().toLowerCase(); // normalise input
-            if (input.equals("n"))
-            {
-                savePos(board);
-                this.isMoving = false;
-                return;
-            } else if (!(input.equals("y") || input.equals("n"))) // invalid input
-            {
-                System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
-            }
-        } while (!input.equals("y"));
-        
-        
-        // Roll dice
-        int[] diceChoice = diceCup.rollTurn(
-                this.posMoving,
-                this.movingPieces,
-                this.movingPiecesAvailable,
-                board
-        );
-        
-        // Bust if no choices can be made
-        if (diceChoice == null)
-        {
-            bust();
-            this.isMoving = false;
-            return;
-        }
-        
         // Save moving pieces
         boolean inMovingPieces;
         for (int choice : diceChoice)
