@@ -4,11 +4,13 @@
  */
 package cantstop;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author admin
  */
-abstract class DiceCupUI {
+abstract class DiceCupUI extends JPanel {
     private final DiceCup diceCup;
     
     public DiceCupUI(DiceCup diceCup)
@@ -19,7 +21,7 @@ abstract class DiceCupUI {
     public abstract void askToRoll();
     public abstract void askToSelect();
     public abstract void displayChoices();
-    public abstract void displayDice(int[] diceRoll);
+    public abstract void displayDice();
     public abstract void bust();
     
     public DiceCup getDiceCup()

@@ -7,6 +7,7 @@ package cantstop;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 
 /**
  *
@@ -23,6 +24,7 @@ public class DiceCup {
     private List<List<Integer[]>> diceChoicesFiltered;
     
     private final Dice[] dice = new Dice[DICE_TOTAL];
+    private int[] diceRoll;
     
     public DiceCup()
     {
@@ -239,7 +241,7 @@ public class DiceCup {
             GameBoard board
     )
     {
-        int[] diceRoll = rollDice();
+        diceRoll = rollDice();
         
         // Pair and keep all possible pairings
         dicePairingChoice(
@@ -267,5 +269,20 @@ public class DiceCup {
     public static int getDiceValueMax()
     {
         return DICE_VALUE_MAX;
+    }
+    
+    public static int getDiceTotal()
+    {
+        return DICE_TOTAL;
+    }
+    
+    public static int getDiceChosenMax()
+    {
+        return DICE_CHOSEN_MAX;
+    }
+    
+    public int[] getDiceRoll()
+    {
+        return this.diceRoll;
     }
 }

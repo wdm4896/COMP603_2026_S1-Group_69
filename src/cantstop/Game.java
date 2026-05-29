@@ -25,7 +25,18 @@ public class Game {
     private static void gameStart()
     {
         roundCurrent = new GameRound(players);
-        roundCurrent.play();        
+        roundCurrent.play();
+        
+        // Pause main thread while game is on-going
+        try {
+            synchronized(USER_PROMPT) {
+                while(!roundCurrent.getWinConditionMet()) {
+                    USER_PROMPT.wait();
+                }
+            }
+        } catch (InterruptedException e) {
+            // Assume the round intentionally ended
+        }
     }
     
     private static void gameEnd(GameScore scoreBoard)

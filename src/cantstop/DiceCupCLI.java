@@ -47,8 +47,10 @@ public class DiceCupCLI extends DiceCupUI {
     }
     
     @Override
-    public void displayDice(int[] diceRoll)
+    public void displayDice()
     {
+        int[] diceRoll = this.getDiceCup().getDiceRoll();
+        
         System.out.print("Dice Roll: " + diceRoll[0]);
         for (int dice = 1; dice < diceRoll.length; dice++)
         {
@@ -61,14 +63,6 @@ public class DiceCupCLI extends DiceCupUI {
     public void bust()
     {
         System.out.println("\nBUST!");
-        try
-        {
-            Thread.sleep(2000);
-        }
-        catch (InterruptedException e)
-        {
-            Thread.currentThread().interrupt();
-        }
     }
     
     /*
@@ -83,6 +77,6 @@ public class DiceCupCLI extends DiceCupUI {
     @Override
     public void askToSelect()
     {
-        System.out.println("Which dice do you wish to select?\n" + Game.USER_PROMPT);
+        System.out.print("Which dice do you wish to select?\n" + Game.USER_PROMPT);
     }
 }

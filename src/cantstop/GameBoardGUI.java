@@ -5,6 +5,7 @@
 package cantstop;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -35,6 +36,12 @@ public class GameBoardGUI extends GameBoardUI {
     public GameBoardGUI(GameBoard board, Queue<Player> players)
     {
         super(board, players);
+        
+        // As this program is made for fullscreen, the size will be set
+        // This may change in future development if we want to add scalable windows
+        this.setMinimumSize(new Dimension(PANEL_WIDTH + SCREEN_PADDING, PANEL_WIDTH + SCREEN_PADDING));
+        this.setPreferredSize(new Dimension(PANEL_WIDTH + SCREEN_PADDING, PANEL_WIDTH + SCREEN_PADDING));
+        this.setMaximumSize(new Dimension(PANEL_WIDTH + SCREEN_PADDING, PANEL_WIDTH + SCREEN_PADDING));
     }
     
     @Override
@@ -60,24 +67,14 @@ public class GameBoardGUI extends GameBoardUI {
         
         drawPosPlayers(g, playersNotMoving);
         
-        // Print moving player position
-        if (playerMoving != null)
+        // Print moving pieces for moving player
+        if (playerMoving != null && 
+                playerMoving.getMovingPiecesMax() - playerMoving.getMovingPiecesAvailable() > 0
+        )
         {
-            // Print moving pieces for moving player
-            if (playerMoving.getMovingPiecesMax() - playerMoving.getMovingPiecesAvailable() > 0)
-            {
-                int[] movingPieces = playerMoving.getMovingPieces();
-                
-                drawPosMoving(g, playerMoving.getPosMoving(), movingPieces);
-                
-                System.out.print("Moving piece values: " + movingPieces[0]);
-                for (int piece = 1; piece < movingPieces.length; piece++)
-                {
-                    if (movingPieces[piece] == 0) { continue; }
-                    System.out.print(", " + movingPieces[piece]);
-                }
-                System.out.println("");
-            }
+            int[] movingPieces = playerMoving.getMovingPieces();
+
+            drawPosMoving(g, playerMoving.getPosMoving(), movingPieces);
         }
     }
     
@@ -175,6 +172,7 @@ public class GameBoardGUI extends GameBoardUI {
         g.setColor(color);
         for (int i = 0; i < BOARD_WIDTH; i++)
         {
+            if (this.getBoard().getColumnClaimed(i)) { continue; }
             // Draw Player Positions
             for (int j = 0; j < columnSizes[i]; j++)
             {
@@ -218,5 +216,10 @@ public class GameBoardGUI extends GameBoardUI {
     public void drawBoard()
     {
         repaint();
+    }
+    
+    public static int getScreenPadding()
+    {
+        return SCREEN_PADDING;
     }
 }
