@@ -196,7 +196,7 @@ public class GameBoardGUI extends GameBoardUI {
         for (int i : movingPieces)
         {
             // Ensure all values are actual moving piece values
-            i = i - this.getBoard().getColumnMin();
+            i = i - GameBoard.getColumnMin();
             if (i < 0) { continue; }
             
             // Draw Moving Positions

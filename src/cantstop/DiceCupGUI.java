@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +22,7 @@ import javax.swing.JLabel;
 public class DiceCupGUI extends DiceCupUI {
     private final static int PANEL_WIDTH = Game.getScreenWidth() - Game.getScreenHeight();
     private final static int PANEL_HEIGHT = Game.getScreenHeight();
-    private final static int DICE_SIZE = 100;
+    private final static int DICE_SIZE = 120;
     private final static int DICE_FONT_SIZE = 50;
     private final static int DICE_MARGIN = 30;
     private final static int BUTTON_HEIGHT = 50;
@@ -117,6 +118,38 @@ public class DiceCupGUI extends DiceCupUI {
         }
     }
     
+    public void resetDice()
+    {   
+        for (int i = 0; i < DiceCup.getDiceTotal(); i++)
+        {
+            this.diceSelection[i].setText("0");
+        }
+    }
+    
+    public void displayPairings(List<Integer> dicePairings)
+    {
+        int[] diceRoll = this.getDiceCup().getDiceRoll();
+        int dieRoll;
+        int dieRollIndex;
+        
+        displayDice();
+        
+        Iterator iterDiceSelection = dicePairings.iterator();
+        for (int i = 0; i < dicePairings.size(); i++) {
+            dieRollIndex = (int) iterDiceSelection.next();
+            dieRoll = diceRoll[dieRollIndex];
+            switch (i / 2)
+            {
+                case 0 -> diceSelection[dieRollIndex].setText("(" + dieRoll + ")");
+                case 1 -> diceSelection[dieRollIndex].setText("{" + dieRoll + "}");
+                default -> diceSelection[dieRollIndex].setText("[" + dieRoll + "]");
+            }
+        }
+        
+        
+        
+    }
+    
     @Override
     public void bust()
     {
@@ -166,6 +199,11 @@ public class DiceCupGUI extends DiceCupUI {
         
         label += "</ul></html>";
         turnList.setText(label);
+    }
+    
+    public void setRollSubmitEnabled(boolean enable)
+    {
+        this.rollSubmit.setEnabled(enable);
     }
     
     public JButton[] getDiceSelection()

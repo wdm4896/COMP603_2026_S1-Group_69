@@ -4,7 +4,6 @@
  */
 package cantstop;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +27,6 @@ public class DiceCupTest {
     private int[] movingPieces;
     private int[] diceRoll;
     private int movingPiecesAvailable;
-    private Player player;
     
     public DiceCupTest() {
     }
@@ -64,11 +62,10 @@ public class DiceCupTest {
     
     @Before
     public void setUp() {
-        board = new GameBoard(new LinkedList<Player>());
-        player = new Player("", Colour.RED);
+        board = new GameBoard(new LinkedList<>());
         movingPos = new int[GameBoard.getBoardWidth()];
         movingPieces = new int[MOVING_PIECES_MAX];
-        diceRoll = new int[]{1, 2, 3, 4};
+        diceRoll = new int[]{4, 3, 2, 1};
         movingPiecesAvailable = MOVING_PIECES_MAX;
     }
     
@@ -253,19 +250,71 @@ public class DiceCupTest {
     public void testDicePairingChoice_7() {
         System.out.println("dicePairingChoice - same numbers stay on the same line");
         
-        movingPieces = new int[]{5, 7};
         diceRoll = new int[]{1, 2, 1, 2};
+        movingPieces = new int[]{5, 7};
         movingPiecesAvailable = MOVING_PIECES_MAX - movingPieces.length;
         
         Integer[][] pairings = {
-            {1, 2}, 
-            {1, 2},
             {1, 1},
             {2, 2},
+            {1, 2}, 
             {1, 2},
-            {2, 1}
         };
-        int rows = 4;
+        int rows = 3;
+        
+        diceCup.dicePairingChoice(
+                movingPos,
+                movingPieces,
+                movingPiecesAvailable,
+                diceRoll,
+                board
+        );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
+        assertEquals(rows, result.size());
+        
+        dicePairingChoiceListCheck(result, pairings);
+    }
+    
+    @Test
+    public void testDicePairingChoice_8() {
+        System.out.println("dicePairingChoice - duplicates aren't added to choice list (2 pairs)");
+        
+        diceRoll = new int[]{1, 1, 2, 3};
+        
+        Integer[][] pairings = {
+            {1, 1},
+            {2, 3},
+            {1, 2}, 
+            {1, 3},
+        };
+        int rows = 2;
+        
+        diceCup.dicePairingChoice(
+                movingPos,
+                movingPieces,
+                movingPiecesAvailable,
+                diceRoll,
+                board
+        );
+        List<List<Integer[]>> result = diceCup.getDiceChoicesFiltered();
+        assertEquals(rows, result.size());
+        
+        dicePairingChoiceListCheck(result, pairings);
+    }
+    
+    @Test
+    public void testDicePairingChoice_9() {
+        System.out.println("dicePairingChoice - duplicates aren't added to choice list (1 pair)");
+        
+        diceRoll = new int[]{1, 2, 2, 2};
+        movingPieces = new int[]{5, 7};
+        movingPiecesAvailable = MOVING_PIECES_MAX - movingPieces.length;
+        
+        Integer[][] pairings = {
+            {1, 2},
+            {2, 2},
+        };
+        int rows = 2;
         
         diceCup.dicePairingChoice(
                 movingPos,

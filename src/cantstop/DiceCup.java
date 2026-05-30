@@ -7,7 +7,7 @@ package cantstop;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
+import java.util.Objects;
 
 /**
  *
@@ -19,7 +19,7 @@ public class DiceCup {
     
     private final static int DICE_TOTAL = 4;
     private final static int DICE_CHOSEN_MAX = 2; // dice that can be paired
-    private final static int DICE_COMBINATIONS = Math.combination(DICE_TOTAL, DICE_CHOSEN_MAX);// = diceTotal / (diceTotal - diceChosenMax);
+    private final static int DICE_COMBINATIONS = Math.combination(DICE_TOTAL, DICE_CHOSEN_MAX);
     private Integer[][] diceChoicesAll;
     private List<List<Integer[]>> diceChoicesFiltered;
     
@@ -88,7 +88,7 @@ public class DiceCup {
     )
     {
         // If the column on the board is already claimed
-        if (board.getColumnClaimed(pairingSum - board.getColumnMin()))
+        if (board.getColumnClaimed(pairingSum - GameBoard.getColumnMin()))
         {
             return false;
         }
@@ -110,7 +110,7 @@ public class DiceCup {
         // If the moving piece can't move anymore
         if (inMovingPieces)
         {
-            int targetIndex = pairingSum - board.getColumnMin();
+            int targetIndex = pairingSum - GameBoard.getColumnMin();
             
             if (movingPos[targetIndex] >= board.getColumnSizes()[targetIndex])
             {
@@ -126,6 +126,94 @@ public class DiceCup {
         
         // Passes checks (piece is a valid movable piece)
         return true;
+    }
+    
+    private void diceRollSort(int[] diceRoll)
+    {
+        int temp;
+        
+        // Sort the dice using bubble sort - no fancy sorting algorithm is needed :)
+        for (int i = 0; i < diceRoll.length; i++) {
+            for (int j = 0; j < diceRoll.length - i - 1; j++) {
+                if (diceRoll[j] > diceRoll[j + 1]) {
+                    temp = diceRoll[j + 1];
+                    diceRoll[j + 1] = diceRoll[j];
+                    diceRoll[j] = temp;   
+                }
+            }
+        }
+    }
+    
+    public boolean dicePairingsExists(List<Integer[]> dicePairings)
+    {
+        Iterator iterDiceChoicesFiltered = diceChoicesFiltered.iterator();
+        Iterator iterDicePairings;
+        
+        List<Integer[]> diceChoice;
+        Iterator iterDiceChoice;
+        
+        Integer[] dicePairing;
+        Integer[] diceChoicePairing;
+        
+        boolean pairingMatches;
+        
+        while (iterDiceChoicesFiltered.hasNext())
+        {
+            diceChoice = (List<Integer[]>) iterDiceChoicesFiltered.next();
+            
+            // Immediately skip cycle if lists aren't the same length
+            if (diceChoice.size() != dicePairings.size()) { continue; }
+            
+            // Compare choice and pairings to see if they directly match
+            iterDicePairings = dicePairings.iterator();
+            iterDiceChoice = diceChoice.iterator();
+            pairingMatches = true;
+            
+            while (iterDicePairings.hasNext() && iterDiceChoice.hasNext())
+            {
+                dicePairing = (Integer[]) iterDicePairings.next();
+                diceChoicePairing = (Integer[]) iterDiceChoice.next();
+                for (int i = 0; i < DICE_CHOSEN_MAX; i++)
+                {
+                    if (!Objects.equals(dicePairing[i], diceChoicePairing[i]))
+                    {
+                        pairingMatches = false;
+                    }
+                }
+            }
+            
+            // Return early if they match
+            if (pairingMatches)
+            {
+                return true;
+            }
+            
+            // Compare choice and pairings to see if they reversely match 
+            iterDicePairings = dicePairings.reversed().iterator();
+            iterDiceChoice = diceChoice.iterator();
+            pairingMatches = true;
+            
+            while (iterDicePairings.hasNext() && iterDiceChoice.hasNext())
+            {
+                dicePairing = (Integer[]) iterDicePairings.next();
+                diceChoicePairing = (Integer[]) iterDiceChoice.next();
+                for (int i = 0; i < DICE_CHOSEN_MAX; i++)
+                {
+                    if (!Objects.equals(dicePairing[i], diceChoicePairing[i]))
+                    {
+                        pairingMatches = false;
+                    }
+                }
+            }
+            
+            if (pairingMatches)
+            {
+                return true;
+            }
+            dicePairings.reversed();
+        }
+        
+        return false;
     }
     
     public void dicePairingChoice(
@@ -145,6 +233,7 @@ public class DiceCup {
         boolean isValidPairing;
         boolean inMovingPieces;
         
+        diceRollSort(diceRoll);
         dicePairings(diceRoll); // Grab all possible pairings with no validation
         
         // Check each pairing to see if it is valid
@@ -176,7 +265,10 @@ public class DiceCup {
                         i--;
                     }
                     
-                    this.diceChoicesFiltered.add(dicePairings);
+                    if (!dicePairingsExists(dicePairings))
+                    {
+                        this.diceChoicesFiltered.add(dicePairings);
+                    }
                     dicePairings = new ArrayList<>();
                     movingPossibility = new ArrayList<>();
                 }
@@ -205,7 +297,10 @@ public class DiceCup {
             }
             
             // Add the pairings to the list of possible options
-            this.diceChoicesFiltered.add(dicePairings);
+            if (!dicePairingsExists(dicePairings))
+            {
+                this.diceChoicesFiltered.add(dicePairings);
+            }
             dicePairings = new ArrayList<>();
             movingPossibility = new ArrayList<>();
         }
@@ -213,7 +308,11 @@ public class DiceCup {
     
     public int[] choiceToOutput(int choice)
     {
-        List<Integer[]> list = this.diceChoicesFiltered.get(choice - 1);
+        return choiceToOutput(this.diceChoicesFiltered.get(choice - 1));
+    }
+
+    public int[] choiceToOutput(List<Integer[]> list)
+    {
         int[] choiceOutput = new int[list.size()];
         int index = 0;
         Iterator iterList = list.iterator();
@@ -233,7 +332,6 @@ public class DiceCup {
         }
         
         return choiceOutput;
-        
     }
     
     public boolean rollTurn(

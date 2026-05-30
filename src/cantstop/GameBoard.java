@@ -97,7 +97,7 @@ public class GameBoard {
         return columnSizes;
     }
     
-    public int getColumnMin()
+    public static int getColumnMin()
     {
         return COLUMN_MIN;
     }
