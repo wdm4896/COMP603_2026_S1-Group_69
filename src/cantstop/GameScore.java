@@ -6,7 +6,6 @@ package cantstop;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -18,17 +17,11 @@ import java.util.List;
  * @author admin
  */
 public class GameScore implements Score {
-    private Queue<Player> players;
-    
-    public GameScore(Queue<Player> players)
-    {
-        this.players = players;
-    }
     
     @Override
     public void scoresDisplayCLI()
     {
-        List<Player> playersScores = new LinkedList<>(players);
+        List<Player> playersScores = new LinkedList<>(Game.getPlayers());
         int playersTotal = playersScores.size();
         
         Iterator iterPlayers;
@@ -62,7 +55,7 @@ public class GameScore implements Score {
     {
         String label = "<html><ul>";
         
-        List<Player> playersScores = new LinkedList<>(players);
+        List<Player> playersScores = new LinkedList<>(Game.getPlayers());
         int playersTotal = playersScores.size();
         
         Iterator iterPlayers;
@@ -99,7 +92,7 @@ public class GameScore implements Score {
     {
         PrintWriter pw;
         
-        List<Player> playersScores = new LinkedList<>(players);
+        List<Player> playersScores = new LinkedList<>(Game.getPlayers());
         int playersTotal = playersScores.size();
         
         Iterator iterPlayers;

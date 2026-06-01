@@ -169,8 +169,8 @@ public class GameManagerCLI extends GameManagerUI {
             {
                 System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
             }
-        } while (!input.equals("n") && this.getGameManager().getPlayers().size() < Game.getPlayersMax());
-        if (this.getGameManager().getPlayers().size() <= 0) {
+        } while (!input.equals("n") && Game.getPlayers().size() < Game.getPlayersMax());
+        if (Game.getPlayers().size() <= 0) {
             kbinput.close();
             System.exit(0);
         }

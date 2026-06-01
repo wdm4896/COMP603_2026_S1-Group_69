@@ -26,7 +26,7 @@ public class GameBoardTest {
     
     @Before
     public void setUp() {
-        board = new GameBoard(new LinkedList<Player>());
+        board = new GameBoard();
     }
 
     /**

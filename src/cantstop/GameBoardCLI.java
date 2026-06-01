@@ -5,16 +5,15 @@
 package cantstop;
 
 import java.util.Iterator;
-import java.util.Queue;
 
 /**
  *
  * @author admin
  */
 public class GameBoardCLI extends GameBoardUI {
-    public GameBoardCLI(GameBoard board, Queue<Player> players)
+    public GameBoardCLI(GameBoard board)
     {
-        super(board, players);
+        super(board);
     }
     
     @Override
@@ -24,7 +23,7 @@ public class GameBoardCLI extends GameBoardUI {
         drawLine("Value", this.getBoard().getColumnValues(), null);
         drawLine("Size", this.getBoard().getColumnSizes(), null);
         
-        Iterator iterPlayers = this.getPlayers().iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player;
         Player playerMoving = null;
         

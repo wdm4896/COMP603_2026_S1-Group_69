@@ -10,7 +10,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Iterator;
-import java.util.Queue;
 import java.util.Stack;
 import javax.swing.ImageIcon;
 
@@ -33,9 +32,9 @@ public class GameBoardGUI extends GameBoardUI {
     private final static Color COLOUR_EMPTY = Color.PINK;
     private final static Color COLOUR_MOVING = Color.WHITE;
     
-    public GameBoardGUI(GameBoard board, Queue<Player> players)
+    public GameBoardGUI(GameBoard board)
     {
-        super(board, players);
+        super(board);
         
         // As this program is made for fullscreen, the size will be set
         // This may change in future development if we want to add scalable windows
@@ -50,7 +49,7 @@ public class GameBoardGUI extends GameBoardUI {
         g.drawImage(BG_IMAGE, (SCREEN_PADDING - PIECE_SIZE) / 2, (SCREEN_PADDING - PIECE_SIZE) / 2, this);
         drawBoard(g);
               
-        Iterator iterPlayers = this.getPlayers().iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player;
         Player playerMoving = null;
         Stack<Player> playersNotMoving = new Stack<>();
@@ -80,7 +79,7 @@ public class GameBoardGUI extends GameBoardUI {
     
     private Color getClaimedColour(int columnClaimed)
     {
-        Iterator iterPlayers = this.getPlayers().iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player;
         
         while (iterPlayers.hasNext())

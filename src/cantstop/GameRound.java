@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -28,29 +27,27 @@ public class GameRound extends JFrame {
     private final GameBoardUI boardUI; // Board View
     private final DiceCup diceCup; // Dice Cup Model
     private final DiceCupUI diceCupUI; // Dice Cup View
-    private final Queue<Player> players;
     
     private boolean winConditionMet = false;
     private Player currentPlayer;
     private List<Integer> diceSelection;
     
-    public GameRound(Queue<Player> players)
+    public GameRound()
     {
         // Title
         super("Game Round");
         
         // Round attributes
-        this.players = players;
-        this.board = new GameBoard(players);
+        this.board = new GameBoard();
         this.diceCup = new DiceCup();
         if (Game.USE_GUI)
         {
-            this.boardUI = new GameBoardGUI(board, players);
+            this.boardUI = new GameBoardGUI(board);
             this.diceCupUI = new DiceCupGUI(diceCup);
         } 
         else
         {
-            this.boardUI = new GameBoardCLI(board, players);
+            this.boardUI = new GameBoardCLI(board);
             this.diceCupUI = new DiceCupCLI(diceCup);
         }
 
@@ -80,8 +77,8 @@ public class GameRound extends JFrame {
         // Set up round beforehand
         boardUI.drawBoard();
         diceCupUI.askToRoll();
-        ((DiceCupGUI) diceCupUI).updateTurnList(players);
-        currentPlayer = players.peek();
+        ((DiceCupGUI) diceCupUI).updateTurnList();
+        currentPlayer = Game.getPlayers().peek();
         currentPlayer.setMoving(true);
         diceSelection = new LinkedList<>();
         this.setVisible(true);
@@ -131,7 +128,7 @@ public class GameRound extends JFrame {
         var kbinput = new Scanner(System.in);
         String input;
         
-        currentPlayer = players.peek();
+        currentPlayer = Game.getPlayers().peek();
         currentPlayer.setMoving(true);
         boardUI.drawBoard();
         
@@ -257,7 +254,7 @@ public class GameRound extends JFrame {
     private void endTurn(Player currentPlayer)
     {
         currentPlayer.savePos(this.board);
-        board.clearColumnsClaimed(players);
+        this.board.clearColumnsClaimed();
             
         if (currentPlayer.getClaimedTotal() >= Game.getWinCondition())
         {
@@ -300,12 +297,12 @@ public class GameRound extends JFrame {
     
     private void nextPlayer()
     {
-        this.players.add(this.players.poll());
-        this.currentPlayer = this.players.peek();
+        Game.getPlayers().add(Game.getPlayers().poll());
+        this.currentPlayer = Game.getPlayers().peek();
         this.currentPlayer.setMoving(true);
         if (Game.USE_GUI)
         {
-            ((DiceCupGUI) this.diceCupUI).updateTurnList(this.players);
+            ((DiceCupGUI) this.diceCupUI).updateTurnList();
         }
     }
     

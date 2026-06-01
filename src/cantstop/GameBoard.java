@@ -5,7 +5,6 @@
 package cantstop;
 
 import java.util.Iterator;
-import java.util.Queue;
 import java.lang.Math;
 /**
  *
@@ -22,11 +21,8 @@ public class GameBoard {
     private final static int[] columnSizes = new int[BOARD_WIDTH];
     private final boolean[] columnClaimed = new boolean[BOARD_WIDTH];
     
-    private final Queue<Player> players;
-    
-    public GameBoard(Queue<Player> players)
+    public GameBoard()
     {
-        this.players = players;
         resetPlayers();
         
         // Generate game board
@@ -52,7 +48,7 @@ public class GameBoard {
     
     private void resetPlayers()
     {
-        Iterator iterPlayers = players.iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player;
         
         while (iterPlayers.hasNext())
@@ -62,9 +58,9 @@ public class GameBoard {
         }
     }
     
-    public void clearColumnsClaimed(Queue<Player> players)
+    public void clearColumnsClaimed()
     {
-        Iterator iterPlayers = players.iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player;
 
         while (iterPlayers.hasNext())
@@ -80,11 +76,6 @@ public class GameBoard {
                 }
             }
         }
-    }
-    
-    public Queue<Player> getPlayers()
-    {
-        return this.players;
     }
     
     public int[] getColumnValues()

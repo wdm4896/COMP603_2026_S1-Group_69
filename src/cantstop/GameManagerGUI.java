@@ -64,7 +64,7 @@ public class GameManagerGUI extends GameManagerUI {
         // Submit input
         this.getGameManager().addPlayer(name, colour);
         
-        switch (this.getGameManager().getPlayers().size())
+        switch (Game.getPlayers().size())
         {
             case 1 -> this.panelStart.getStartGame().setEnabled(true);
             case Game.PLAYERS_MAX -> this.panelStart.getFieldSubmit().setEnabled(false);

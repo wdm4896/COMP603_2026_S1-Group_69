@@ -11,7 +11,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -192,11 +191,11 @@ public class DiceCupGUI extends DiceCupUI {
         }
     }
     
-    public void updateTurnList(Queue<Player> players)
+    public void updateTurnList()
     {
         String label = "<html>";
         
-        Iterator iterPlayers = players.iterator();
+        Iterator iterPlayers = Game.getPlayers().iterator();
         Player player = (Player) iterPlayers.next();
 
         label += "<h1>Current Player: <font color='" + player.getColour().name() + "'>" + player.getName() + "</font></h1>";

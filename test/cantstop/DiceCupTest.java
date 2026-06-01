@@ -62,7 +62,7 @@ public class DiceCupTest {
     
     @Before
     public void setUp() {
-        board = new GameBoard(new LinkedList<>());
+        board = new GameBoard();
         movingPos = new int[GameBoard.getBoardWidth()];
         movingPieces = new int[MOVING_PIECES_MAX];
         diceRoll = new int[]{4, 3, 2, 1};

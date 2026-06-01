@@ -19,13 +19,13 @@ public class Game {
     public final static String USER_PROMPT = "> ";
     private final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private final static Queue<Player> players = new LinkedList<>();
-    private final GameScore scoreBoard = new GameScore(players);
+    private final GameScore scoreBoard = new GameScore();
     private final GameManager gameManager;
     public final GameManagerUI gameManagerUI;
     
     public Game()
     {
-        gameManager = new GameManager(players, scoreBoard);
+        gameManager = new GameManager(scoreBoard);
         
         if (USE_GUI)
         {

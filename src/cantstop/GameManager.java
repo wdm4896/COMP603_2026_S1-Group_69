@@ -7,7 +7,6 @@ package cantstop;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  *
@@ -15,20 +14,18 @@ import java.util.Queue;
  */
 public class GameManager {
     private final List<Colour> coloursAvailable = new LinkedList<>(Arrays.asList(Colour.values()));
-    private final Queue<Player> players;
     private final GameScore scoreBoard;
     public static GameRound roundCurrent;
     
-    public GameManager(Queue<Player> players, GameScore scoreBoard)
+    public GameManager(GameScore scoreBoard)
     {
-        this.players = players;
         this.scoreBoard = scoreBoard;
     }
     
     public void gameStart()
     {
         if (roundCurrent != null) { roundCurrent.dispose(); }
-        roundCurrent = new GameRound(players);
+        roundCurrent = new GameRound();
         roundCurrent.play();
         
         try {
@@ -57,13 +54,8 @@ public class GameManager {
     
     public void addPlayer(String name, Colour colour)
     {
-        this.players.add(new Player(name, colour));
+        Game.getPlayers().add(new Player(name, colour));
         this.coloursAvailable.remove(colour);
-    }
-    
-    public Queue<Player> getPlayers()
-    {
-        return this.players;
     }
     
     public List<Colour> getColoursAvailable()
