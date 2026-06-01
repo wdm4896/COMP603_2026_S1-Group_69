@@ -4,11 +4,12 @@
  */
 package cantstop;
 
-import java.util.Queue;
 /**
  *
  * @author admin
  */
-abstract class Score {
-    public abstract void scoresDisplay(Queue<Player> players);
+public interface Score {
+    public void scoresDisplayCLI();
+    public String scoresDisplayGUI();
+    public void scoresSave();
 }

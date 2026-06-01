@@ -21,7 +21,6 @@ import javax.swing.JFrame;
  * @author admin
  */
 public class GameRound extends JFrame {
-    private final static boolean USE_GUI = true;
     private final static int FRAME_WIDTH = Game.getScreenHeight();
     private final static int FRAME_HEIGHT = Game.getScreenHeight();
     
@@ -44,7 +43,7 @@ public class GameRound extends JFrame {
         this.players = players;
         this.board = new GameBoard(players);
         this.diceCup = new DiceCup();
-        if (USE_GUI)
+        if (Game.USE_GUI)
         {
             this.boardUI = new GameBoardGUI(board, players);
             this.diceCupUI = new DiceCupGUI(diceCup);
@@ -66,7 +65,7 @@ public class GameRound extends JFrame {
     
     public void play()
     {
-        if (USE_GUI)
+        if (Game.USE_GUI)
         {
             playGUI();
         }
@@ -132,7 +131,6 @@ public class GameRound extends JFrame {
         var kbinput = new Scanner(System.in);
         String input;
         
-//        Player currentPlayer = null;
         currentPlayer = players.peek();
         currentPlayer.setMoving(true);
         boardUI.drawBoard();
@@ -160,7 +158,6 @@ public class GameRound extends JFrame {
         
         System.out.println("\n" + currentPlayer.getColour().font() + currentPlayer.getName() + Colour.DEFAULT.font() + " wins!!!");
     }
-    
         
     private List<Integer[]> getPairings()
     {
@@ -245,7 +242,7 @@ public class GameRound extends JFrame {
             return;
         }
         
-        if (USE_GUI)
+        if (Game.USE_GUI)
         {
             diceCupUI.askToSelect();
         }
@@ -264,7 +261,12 @@ public class GameRound extends JFrame {
             
         if (currentPlayer.getClaimedTotal() >= Game.getWinCondition())
         {
-            synchronized(Game.USER_PROMPT) {
+            if (Game.USE_GUI) {
+                ((DiceCupGUI) diceCupUI).buttonsDisable();
+                ((DiceCupGUI) diceCupUI).displayWinner(currentPlayer);
+            }
+            synchronized (Game.USER_PROMPT)
+            {
                 winConditionMet = true;
                 currentPlayer.hasWon();
                 Game.USER_PROMPT.notify();
@@ -301,7 +303,7 @@ public class GameRound extends JFrame {
         this.players.add(this.players.poll());
         this.currentPlayer = this.players.peek();
         this.currentPlayer.setMoving(true);
-        if (USE_GUI)
+        if (Game.USE_GUI)
         {
             ((DiceCupGUI) this.diceCupUI).updateTurnList(this.players);
         }

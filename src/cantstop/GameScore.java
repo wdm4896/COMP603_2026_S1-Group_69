@@ -12,16 +12,24 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 /**
  *
  * @author admin
  */
-public class GameScore extends Score implements ScoreSave {
-    @Override
-    public void scoresDisplay(Queue<Player> players)
+public class GameScore implements Score {
+    private Queue<Player> players;
+    
+    public GameScore(Queue<Player> players)
     {
-        players = new LinkedList<>(players);
-        int playersTotal = players.size();
+        this.players = players;
+    }
+    
+    @Override
+    public void scoresDisplayCLI()
+    {
+        List<Player> playersScores = new LinkedList<>(players);
+        int playersTotal = playersScores.size();
         
         Iterator iterPlayers;
         Player pHighest;
@@ -32,7 +40,7 @@ public class GameScore extends Score implements ScoreSave {
         // Order scores from largest to smallest
         for (int i = 0; i < playersTotal; i++)
         {
-            iterPlayers = players.iterator();
+            iterPlayers = playersScores.iterator();
             pHighest = (Player) iterPlayers.next();
             
             while (iterPlayers.hasNext())
@@ -45,17 +53,54 @@ public class GameScore extends Score implements ScoreSave {
             }
             
             System.out.println(pHighest.getColour().font() + pHighest.getName() + Colour.DEFAULT.font() + ": " + pHighest.getWinsTotal());
-            players.remove(pHighest);
+            playersScores.remove(pHighest);
         }
     }
     
     @Override
-    public void scoresSave(Queue<Player> players)
+    public String scoresDisplayGUI()
+    {
+        String label = "<html><ul>";
+        
+        List<Player> playersScores = new LinkedList<>(players);
+        int playersTotal = playersScores.size();
+        
+        Iterator iterPlayers;
+        Player pHighest;
+        Player pCurrent;
+        
+        // Order scores from largest to smallest
+        for (int i = 0; i < playersTotal; i++)
+        {
+            iterPlayers = playersScores.iterator();
+            pHighest = (Player) iterPlayers.next();
+            
+            while (iterPlayers.hasNext())
+            {
+                pCurrent = (Player) iterPlayers.next();
+                if (pCurrent.getWinsTotal() > pHighest.getWinsTotal())
+                {
+                    pHighest = pCurrent;
+                }
+            }
+            
+            label += "<li><font size=5><font color='" + pHighest.getColour().name() + "'>" 
+                    + pHighest.getName() + "</font>" + ": " + pHighest.getWinsTotal() + "</font></li>";
+            playersScores.remove(pHighest);
+        }
+        
+        label += "</ul></html>";
+        
+        return label;
+    }
+    
+    @Override
+    public void scoresSave()
     {
         PrintWriter pw;
         
-        players = new LinkedList<Player>(players);
-        int playersTotal = players.size();
+        List<Player> playersScores = new LinkedList<>(players);
+        int playersTotal = playersScores.size();
         
         Iterator iterPlayers;
         Player playerHighest;
@@ -71,7 +116,7 @@ public class GameScore extends Score implements ScoreSave {
             pw.println("Final scores:");
             for (int i = 0; i < playersTotal; i++)
             {
-                iterPlayers = players.iterator();
+                iterPlayers = playersScores.iterator();
                 playerHighest = (Player) iterPlayers.next();
 
                 while (iterPlayers.hasNext())
@@ -84,7 +129,7 @@ public class GameScore extends Score implements ScoreSave {
                 }
 
                 pw.println(playerHighest.getName() + " (" + playerHighest.getColour().name() + "): " + playerHighest.getWinsTotal());
-                players.remove(playerHighest);
+                playersScores.remove(playerHighest);
             }
             
             pw.close();

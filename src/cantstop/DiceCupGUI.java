@@ -101,6 +101,18 @@ public class DiceCupGUI extends DiceCupUI {
         this.add(rollSubmit, buttonConstraints);
     }
     
+    public void buttonsEnable()
+    {
+        rollDice.setEnabled(true);
+        endTurn.setEnabled(true);
+    }
+    
+    public void buttonsDisable()
+    {
+        rollDice.setEnabled(false);
+        endTurn.setEnabled(false);
+    }
+    
     @Override
     public void displayChoices()
     {
@@ -145,15 +157,13 @@ public class DiceCupGUI extends DiceCupUI {
                 default -> diceSelection[dieRollIndex].setText("[" + dieRoll + "]");
             }
         }
-        
-        
-        
     }
     
     @Override
     public void bust()
     {
         // Does nothing as figuring out how to make it work properly was too hard for either of us :/
+        resetDice();
     }
     
     @Override
@@ -201,6 +211,13 @@ public class DiceCupGUI extends DiceCupUI {
         turnList.setText(label);
     }
     
+    public void displayWinner(Player player)
+    {
+        String label = "<html><h1>Winner: <font color='" + player.getColour().name() 
+                + "'>" + player.getName() + "</font></h1>";
+        this.turnList.setText(label);
+    }
+    
     public void setRollSubmitEnabled(boolean enable)
     {
         this.rollSubmit.setEnabled(enable);
@@ -225,6 +242,4 @@ public class DiceCupGUI extends DiceCupUI {
     {
         return this.endTurn;
     }
-
-
 }
