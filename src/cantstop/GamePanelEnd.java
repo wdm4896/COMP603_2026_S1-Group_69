@@ -68,6 +68,13 @@ public class GamePanelEnd extends JPanel {
     
     public void end()
     {
+        try
+        {
+            this.scoreBoard.scoresSaveDB();
+            this.playerScores.setText(this.scoreBoard.scoresDisplayGUI_DB());
+        } catch (NullPointerException e) {
+            // Won't display the database
+        }
         this.dialogue.setText("Thanks for playing!");
         this.saveYes.setVisible(false);
         this.saveNo.setVisible(false);

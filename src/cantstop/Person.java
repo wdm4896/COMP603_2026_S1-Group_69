@@ -9,13 +9,15 @@ package cantstop;
  * @author admin
  */
 abstract class Person {
-    private String name;
+    private final String name;
+    private final String username;
     private final Colour colour;
     private int winsTotal = 0;
     
-    public Person(String name, Colour colour)
+    public Person(String name, String username, Colour colour)
     {
         this.name = name;
+        this.username = username;
         this.colour = colour;
     }
     
@@ -24,9 +26,9 @@ abstract class Person {
         return this.name;
     }
     
-    public void setName(String name)
+    public String getUsername()
     {
-        this.name = name;
+        return this.username;
     }
     
     public int getWinsTotal()

@@ -12,7 +12,10 @@ import javax.swing.JFrame;
  * @author admin
  */
 public class GameManagerGUI extends GameManagerUI {
-    
+    private final static int FRAME_WIDTH_START = 700;
+    private final static int FRAME_HEIGHT_START = 700;
+    private final static int FRAME_WIDTH_END = 500;
+    private final static int FRAME_HEIGHT_END = 500;
     private JFrame gameManagementFrame;
     private GamePanelStart panelStart;
     private GamePanelEnd panelEnd;
@@ -38,7 +41,7 @@ public class GameManagerGUI extends GameManagerUI {
         this.gameManagementFrame = new JFrame("Save Scores");
         this.gameManagementFrame.add(this.panelEnd);
         this.gameManagementFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.gameManagementFrame.setSize(500, 500);
+        this.gameManagementFrame.setSize(FRAME_WIDTH_END, FRAME_HEIGHT_END);
         this.gameManagementFrame.setLocationRelativeTo(null);
         this.gameManagementFrame.setVisible(true);
         
@@ -56,13 +59,14 @@ public class GameManagerGUI extends GameManagerUI {
     public void addPlayer()
     {
         String name = panelStart.getFieldName().getText();
+        String username = panelStart.getFieldUsername().getText();
         Colour colour = (Colour) panelStart.getFieldColour().getSelectedItem();
         
         // Validate input
         if (name.equals("")) { return; }
         
         // Submit input
-        this.getGameManager().addPlayer(name, colour);
+        this.getGameManager().addPlayer(name, username, colour);
         
         switch (Game.getPlayers().size())
         {
@@ -77,7 +81,7 @@ public class GameManagerGUI extends GameManagerUI {
         this.gameManagementFrame = new JFrame("Add Players");
         this.gameManagementFrame.add(panelStart);
         this.gameManagementFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.gameManagementFrame.setSize(500, 500);
+        this.gameManagementFrame.setSize(FRAME_WIDTH_START, FRAME_HEIGHT_START);
         this.gameManagementFrame.setLocationRelativeTo(null);
         this.gameManagementFrame.setVisible(true);
         

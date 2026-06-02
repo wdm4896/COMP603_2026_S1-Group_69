@@ -11,5 +11,9 @@ package cantstop;
 public interface Score {
     public void scoresDisplayCLI();
     public String scoresDisplayGUI();
-    public void scoresSave();
+    public void scoresSaveFile();
+    public void scoresDisplayCLI_DB();
+    public String scoresDisplayGUI_DB();
+    public void scoresSaveDB();
+    
 }

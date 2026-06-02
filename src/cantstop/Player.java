@@ -4,7 +4,6 @@
  */
 package cantstop;
 
-import java.util.Scanner;
 /**
  *
  * @author admin
@@ -21,7 +20,12 @@ public class Player extends Person implements Turn {
     
     public Player(String name, Colour colour)
     {
-        super(name, colour);
+        super(name, null, colour);
+    }
+    
+    public Player(String name, String username, Colour colour)
+    {
+        super(name, username, colour);
     }
     
     @Override

@@ -92,6 +92,9 @@ public class GameManagerCLI extends GameManagerUI {
             }
         } while (!(input.equals("y") || input.equals("n")));
         
+        this.getGameManager().getScoreBoard().scoresSaveDB();
+        this.getGameManager().getScoreBoard().scoresDisplayCLI_DB();
+        
         System.out.println("\nThanks for playing!");
     }
     
@@ -99,12 +102,17 @@ public class GameManagerCLI extends GameManagerUI {
     public void addPlayer()
     {
         String name;
+        String username;
         Colour colour;
         
         // Set player name
         Scanner kbinput = new Scanner(System.in);
         System.out.print("\nWhat is your name?\n" + Game.USER_PROMPT);
         name = kbinput.nextLine();
+        
+        // Set player username
+        System.out.print("\nWhat is your username? (Leave blank to be left off of global leaderboards)\n" + Game.USER_PROMPT);
+        username = kbinput.nextLine();
         
         // Prompt for colour input
         System.out.println("\nWhich colour would you like to play as?");
@@ -141,7 +149,7 @@ public class GameManagerCLI extends GameManagerUI {
         colour = this.getGameManager().getColoursAvailable().get(colourIndex);
         
         System.out.println("\nAdding player " + colour.font() + name + Colour.DEFAULT.font() + " to the game...\n" );
-        this.getGameManager().addPlayer(name, colour);
+        this.getGameManager().addPlayer(name, username, colour);
         
         try
         {

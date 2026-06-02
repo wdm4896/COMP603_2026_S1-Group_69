@@ -26,6 +26,7 @@ public class GamePanelStart extends JPanel {
     private final List<Colour> coloursAvailable;
     private final JLabel playersDisplay = new JLabel("Loading Players...");
     private final JTextField fieldName = new JTextField("", 10);
+    private final JTextField fieldUsername = new JTextField("", 10);
     private final JComboBox<Colour> fieldColour = new JComboBox<>();
     private final JButton fieldSubmit = new JButton("Add Player");
     private final JButton startGame = new JButton("Start Game");
@@ -40,6 +41,8 @@ public class GamePanelStart extends JPanel {
         playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.PAGE_AXIS));
         
         JPanel playerPanel = new JPanel();
+        playerPanel.add(new JLabel("Username: "));
+        playerPanel.add(fieldUsername);
         playerPanel.add(new JLabel("Name: "));
         playerPanel.add(fieldName);
         
@@ -102,6 +105,11 @@ public class GamePanelStart extends JPanel {
     public JTextField getFieldName()
     {
         return this.fieldName;
+    }
+    
+    public JTextField getFieldUsername()
+    {
+        return this.fieldUsername;
     }
     
     public JComboBox getFieldColour()

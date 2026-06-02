@@ -25,8 +25,12 @@
             <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GameManager.java</file>
             <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/Score.java</file>
             <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GameManagerGUI.java</file>
-            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GameStartPanel.java</file>
-            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GameEndPanel.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GamePanelStart.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GamePanelEnd.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/GameDialogPlayAgain.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/Turn.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/test/cantstop/GameBoardTest.java</file>
+            <file>file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/src/cantstop/DBManager.java</file>
         </group>
     </open-files>
 </project-private>

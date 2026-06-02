@@ -1,0 +1,14 @@
+Tue Jun 02 15:25:22 NZST 2026 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
+----------------------------------------------------------------
+Tue Jun 02 15:25:25 NZST 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-865d-4c16-ffff98edf356 
+on database directory /home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/CantStop/CantStopDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5f6b6180 
+Loaded from file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/javadb/lib/derby.jar
+java.vendor=Arch Linux
+java.runtime.version=26.0.1
+user.dir=/home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/javadb
+os.name=Linux
+os.arch=amd64
+os.version=7.0.10-arch1-1
+derby.system.home=/home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/CantStop
+Database Class Loader started - derby.database.classpath=''

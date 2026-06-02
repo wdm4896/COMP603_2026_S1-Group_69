@@ -41,7 +41,7 @@ public class GameManager {
     
     public void saveScores()
     {
-        this.scoreBoard.scoresSave();
+        this.scoreBoard.scoresSaveFile();
         try
         {
             Thread.sleep(1000);
@@ -52,9 +52,10 @@ public class GameManager {
         }
     }
     
-    public void addPlayer(String name, Colour colour)
+    public void addPlayer(String name, String username, Colour colour)
     {
-        Game.getPlayers().add(new Player(name, colour));
+        if (username.equals("")) { username = null; }
+        Game.getPlayers().add(new Player(name, username, colour));
         this.coloursAvailable.remove(colour);
     }
     

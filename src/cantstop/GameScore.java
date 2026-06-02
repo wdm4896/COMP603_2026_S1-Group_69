@@ -9,6 +9,10 @@ import java.util.LinkedList;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,6 +21,15 @@ import java.util.List;
  * @author admin
  */
 public class GameScore implements Score {
+    
+    private final DBManager dbManager;
+    private final Connection conn;
+    
+    public GameScore()
+    {
+        this.dbManager = new DBManager();
+        this.conn = this.dbManager.getConnection();
+    }
     
     @Override
     public void scoresDisplayCLI()
@@ -88,7 +101,61 @@ public class GameScore implements Score {
     }
     
     @Override
-    public void scoresSave()
+    public void scoresDisplayCLI_DB()
+    {
+        try {
+            Statement statement = this.conn.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT 10 ROWS ONLY"
+            );
+            
+            String username;
+            int score;
+            int position = 1;
+            while (rs.next())
+            {
+                username = rs.getString("USERNAME");
+                score = rs.getInt("SCORE");
+                System.out.println(position++ + ") " + username + ": "
+                        + score + " win" + ((score == 1) ? "" : "s")
+                );
+            }
+        } catch (SQLException ex) {
+            System.getLogger(GameScore.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    @Override
+    public String scoresDisplayGUI_DB()
+    {
+        String label = "<html> <font size=4>";
+        
+        try {
+            Statement statement = this.conn.createStatement();
+            ResultSet rs = statement.executeQuery(
+                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT 10 ROWS ONLY"
+            );
+            
+            String username;
+            int score;
+            int position = 1;
+            while (rs.next())
+            {
+                username = rs.getString("USERNAME");
+                score = rs.getInt("SCORE");
+                label += position++ + ") " + username + ": "
+                        + score + " win" + ((score == 1) ? "" : "s") + "<br>";
+            }
+        } catch (SQLException ex) {
+            System.getLogger(GameScore.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
+        label += "</font></html>";
+        return label;
+    }
+    
+    @Override
+    public void scoresSaveFile()
     {
         PrintWriter pw;
         
@@ -129,6 +196,53 @@ public class GameScore implements Score {
         } catch (FileNotFoundException e)
         {
             System.out.println(e.getMessage());
+        }
+    }
+    
+    @Override
+    public void scoresSaveDB()
+    {
+        Iterator iterPlayers = Game.getPlayers().iterator();
+        Player player;
+        String username;
+        int winsTotal;
+        
+        try {
+            Statement statement = this.conn.createStatement();
+            ResultSet rs;
+            
+            while (iterPlayers.hasNext())
+            {
+                player = (Player) iterPlayers.next();
+                username = player.getUsername();
+                winsTotal = player.getWinsTotal();
+                
+                // Skip to next loop if player has no username
+                if (username == null || winsTotal <= 0) { continue; }
+                
+                // Add score to database
+                rs = statement.executeQuery(
+                        "SELECT SCORE FROM APP.SCORES WHERE USERNAME = '" + username + "'"
+                );
+                
+                if (rs.next()) // If username is in database
+                {
+                    winsTotal += rs.getInt("SCORE");
+                    statement.executeUpdate(
+                        "UPDATE APP.SCORES SET SCORE = " + winsTotal 
+                        + " WHERE USERNAME = '" + username + "'"
+                    );
+                }
+                else // If username isn't in database yet
+                {
+                    statement.executeUpdate(
+                        "INSERT INTO APP.SCORES VALUES ('" + username 
+                        + "', " + winsTotal + ")"
+                    );
+                }
+            }
+        } catch (SQLException ex) {
+            System.getLogger(GameScore.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
 }
