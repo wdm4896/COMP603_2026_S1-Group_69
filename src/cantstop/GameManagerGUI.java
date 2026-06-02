@@ -37,7 +37,7 @@ public class GameManagerGUI extends GameManagerUI {
     @Override
     public void gameEnd()
     {
-        panelEnd = new GamePanelEnd(this.getGameManager().getScoreBoard());
+        this.panelEnd = new GamePanelEnd();
         this.gameManagementFrame = new JFrame("Save Scores");
         this.gameManagementFrame.add(this.panelEnd);
         this.gameManagementFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,9 +58,9 @@ public class GameManagerGUI extends GameManagerUI {
     @Override
     public void addPlayer()
     {
-        String name = panelStart.getFieldName().getText();
-        String username = panelStart.getFieldUsername().getText();
-        Colour colour = (Colour) panelStart.getFieldColour().getSelectedItem();
+        String name = this.panelStart.getFieldName().getText();
+        String username = this.panelStart.getFieldUsername().getText();
+        Colour colour = (Colour) this.panelStart.getFieldColour().getSelectedItem();
         
         // Validate input
         if (name.equals("")) { return; }
@@ -79,7 +79,7 @@ public class GameManagerGUI extends GameManagerUI {
     public void sessionPrepare() {
         this.panelStart = new GamePanelStart(this.getGameManager().getColoursAvailable());
         this.gameManagementFrame = new JFrame("Add Players");
-        this.gameManagementFrame.add(panelStart);
+        this.gameManagementFrame.add(this.panelStart);
         this.gameManagementFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameManagementFrame.setSize(FRAME_WIDTH_START, FRAME_HEIGHT_START);
         this.gameManagementFrame.setLocationRelativeTo(null);
@@ -93,11 +93,11 @@ public class GameManagerGUI extends GameManagerUI {
         
         this.panelStart.getStartGame().addActionListener((ActionEvent e) -> {
             this.gameManagementFrame.setVisible(false);
-            this.gameManagementFrame.remove(panelStart);           
+            this.gameManagementFrame.remove(this.panelStart);           
             gameStart();
         });
         
-        GameDialogPlayAgain playAgain = new GameDialogPlayAgain(gameManagementFrame, this.getGameManager().getScoreBoard());
+        GameDialogPlayAgain playAgain = new GameDialogPlayAgain(this.gameManagementFrame);
         playAgain.setSize(300, 250);
         playAgain.setLocationRelativeTo(null);
         

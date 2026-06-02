@@ -110,10 +110,10 @@ public class GameBoardGUI extends GameBoardUI {
         for (int i = 0; i < BOARD_WIDTH; i++)
         {
             // Draw Text
-            if (BOARD_WIDTH == 11)
+            if (BOARD_WIDTH == 11 && BOARD_HEIGHT == 13 + 2)
             {
                 g.setColor(Colour.DEFAULT.color());
-                posYShift = ((float) (BOARD_HEIGHT - columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
+                posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
                 posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
                 posY = (BOARD_HEIGHT + 2) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift - PIECE_SIZE;
                 g.drawString(LOGO_TEXT[i], posX, posY);
@@ -130,9 +130,9 @@ public class GameBoardGUI extends GameBoardUI {
             }
             
             // Draw Spaces
-            for (int j = 0; j < columnSizes[i]; j++)
+            for (int j = 0; j < this.columnSizes[i]; j++)
             {
-                posYShift = ((float) (BOARD_HEIGHT - columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
+                posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
                 posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
                 posY = (BOARD_HEIGHT - j - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift;
                 g.fillRect(posX, posY, PIECE_SIZE, PIECE_SIZE);
@@ -143,9 +143,9 @@ public class GameBoardGUI extends GameBoardUI {
             {
                 g.setColor(Colour.DEFAULT.color());
             }
-            posYShift = ((float) (BOARD_HEIGHT - columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
+            posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
             posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
-            posY = (BOARD_HEIGHT - columnSizes[i] - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift + PIECE_SIZE;
+            posY = (BOARD_HEIGHT - this.columnSizes[i] - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift + PIECE_SIZE;
             g.drawString(Integer.toString(columnValues[i]), posX, posY);
         }
     }
@@ -173,11 +173,11 @@ public class GameBoardGUI extends GameBoardUI {
         {
             if (this.getBoard().getColumnClaimed(i)) { continue; }
             // Draw Player Positions
-            for (int j = 0; j < columnSizes[i]; j++)
+            for (int j = 0; j < this.columnSizes[i]; j++)
             {
                 if (j != playerPos[i] - 1) { continue; }
 
-                posYShift = ((float) (BOARD_HEIGHT - columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
+                posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
                 posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
                 posY = (BOARD_HEIGHT - j - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift;
                 g.fillRect(posX, posY, PIECE_SIZE, PIECE_SIZE);
@@ -199,11 +199,11 @@ public class GameBoardGUI extends GameBoardUI {
             if (i < 0) { continue; }
             
             // Draw Moving Positions
-            for (int j = 0; j < columnSizes[i]; j++)
+            for (int j = 0; j < this.columnSizes[i]; j++)
             {
                 if (j != movingPos[i] - 1) { continue; }
 
-                posYShift = ((float) (BOARD_HEIGHT - columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
+                posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
                 posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
                 posY = (BOARD_HEIGHT - j - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift;
                 g.fillRect(posX, posY, PIECE_SIZE, PIECE_SIZE);

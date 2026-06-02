@@ -19,21 +19,21 @@ public class Game {
     public final static String USER_PROMPT = "> ";
     private final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private final static Queue<Player> players = new LinkedList<>();
-    private final GameScore scoreBoard = new GameScore();
+    private final static GameScore scoreBoard = GameScore.getInstance();
     private final GameManager gameManager;
     public final GameManagerUI gameManagerUI;
     
     public Game()
     {
-        gameManager = new GameManager(scoreBoard);
+        this.gameManager = new GameManager();
         
         if (USE_GUI)
         {
-            gameManagerUI = new GameManagerGUI(gameManager);
+            this.gameManagerUI = new GameManagerGUI(this.gameManager);
         }
         else
         {
-            gameManagerUI = new GameManagerCLI(gameManager);
+            this.gameManagerUI = new GameManagerCLI(this.gameManager);
         }
     }
     
@@ -50,6 +50,11 @@ public class Game {
     public static int getPlayersMax()
     {
         return PLAYERS_MAX;
+    }
+    
+    public static GameScore getScoreBoard()
+    {
+        return scoreBoard;
     }
         
     public static int getWinCondition()

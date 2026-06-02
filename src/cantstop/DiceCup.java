@@ -30,7 +30,7 @@ public class DiceCup {
     {
         for (int i = 0; i < DICE_TOTAL; i++)
         { 
-            dice[i] = new Dice(DICE_VALUE_MIN, DICE_VALUE_MAX);
+            this.dice[i] = new Dice(DICE_VALUE_MIN, DICE_VALUE_MAX);
         }
     }
     
@@ -40,7 +40,7 @@ public class DiceCup {
         
         for (int i = 0; i < DICE_TOTAL; i++)
         {
-            diceValues[i] = dice[i].roll();
+            diceValues[i] = this.dice[i].roll();
         }
         
         return diceValues;
@@ -146,7 +146,7 @@ public class DiceCup {
     
     public boolean dicePairingsExists(List<Integer[]> dicePairings)
     {
-        Iterator iterDiceChoicesFiltered = diceChoicesFiltered.iterator();
+        Iterator iterDiceChoicesFiltered = this.diceChoicesFiltered.iterator();
         Iterator iterDicePairings;
         
         List<Integer[]> diceChoice;
@@ -339,14 +339,14 @@ public class DiceCup {
             GameBoard board
     )
     {
-        diceRoll = rollDice();
+        this.diceRoll = rollDice();
         
         // Pair and keep all possible pairings
         dicePairingChoice(
                 player.getPosMoving(),
                 player.getMovingPieces(),
                 player.getMovingPiecesAvailable(),
-                diceRoll,
+                this.diceRoll,
                 board
         );
 

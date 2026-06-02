@@ -41,7 +41,7 @@ public class GameManagerCLI extends GameManagerUI {
             
             do
             {
-                this.getGameManager().getScoreBoard().scoresDisplayCLI();
+                Game.getScoreBoard().scoresDisplayCLI();
                 try
                 {
                     Thread.sleep(1000);
@@ -92,8 +92,8 @@ public class GameManagerCLI extends GameManagerUI {
             }
         } while (!(input.equals("y") || input.equals("n")));
         
-        this.getGameManager().getScoreBoard().scoresSaveDB();
-        this.getGameManager().getScoreBoard().scoresDisplayCLI_DB();
+        Game.getScoreBoard().scoresSaveDB();
+        Game.getScoreBoard().scoresDisplayCLI_DB();
         
         System.out.println("\nThanks for playing!");
     }

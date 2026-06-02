@@ -22,6 +22,6 @@ public class Dice {
     
     public int roll()
     {
-     return r.nextInt(valueMin, valueMax + 1);   
+     return this.r.nextInt(this.valueMin, this.valueMax + 1);   
     }
 }

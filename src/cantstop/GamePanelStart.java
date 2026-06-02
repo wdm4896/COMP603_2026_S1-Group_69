@@ -41,16 +41,16 @@ public class GamePanelStart extends JPanel {
         playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.PAGE_AXIS));
         
         JPanel playerPanel = new JPanel();
-        playerPanel.add(new JLabel("Username: "));
-        playerPanel.add(fieldUsername);
         playerPanel.add(new JLabel("Name: "));
-        playerPanel.add(fieldName);
+        playerPanel.add(this.fieldName);
+        playerPanel.add(new JLabel("Username: "));
+        playerPanel.add(this.fieldUsername);
         
         updateColours();
         playerPanel.add(new JLabel("Colour: "));
-        playerPanel.add(fieldColour);
+        playerPanel.add(this.fieldColour);
         
-        playerPanel.add(fieldSubmit);
+        playerPanel.add(this.fieldSubmit);
         this.add(playerPanel, BorderLayout.NORTH);
         
         
@@ -61,7 +61,7 @@ public class GamePanelStart extends JPanel {
         this.playersDisplay.setHorizontalAlignment(SwingConstants.CENTER);
         this.playersDisplay.setAlignmentX(CENTER_ALIGNMENT);
         playersPanel.add(playersHeader);
-        playersPanel.add(playersDisplay);
+        playersPanel.add(this.playersDisplay);
         this.add(playersPanel, BorderLayout.CENTER);
         updateLabel();
         

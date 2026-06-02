@@ -45,7 +45,7 @@ public class Player extends Person implements Turn {
             }
         }
         
-        movingPieces = new int[MOVING_PIECES_MAX];
+        this.movingPieces = new int[MOVING_PIECES_MAX];
         this.movingPiecesAvailable = MOVING_PIECES_MAX;
         
         this.isMoving = false;
@@ -54,7 +54,7 @@ public class Player extends Person implements Turn {
     public void bust()
     {
         this.posMoving = this.posCurrent.clone();
-        movingPieces = new int[MOVING_PIECES_MAX];
+        this.movingPieces = new int[MOVING_PIECES_MAX];
         this.movingPiecesAvailable = MOVING_PIECES_MAX;
         this.isMoving = false;
     }
@@ -81,7 +81,7 @@ public class Player extends Person implements Turn {
         for (int choice : diceChoice)
         {
             // Increases moving value
-            int targetIndex = choice - board.getColumnMin();
+            int targetIndex = choice - GameBoard.getColumnMin();
             if (
                     0 <= this.posMoving[targetIndex] &&
                     this.posMoving[targetIndex] < board.getColumnSizes()[targetIndex]
@@ -99,7 +99,7 @@ public class Player extends Person implements Turn {
             
             if (!inMovingPieces && this.movingPiecesAvailable > 0)
             {
-                this.movingPieces[MOVING_PIECES_MAX - movingPiecesAvailable--] = choice;
+                this.movingPieces[MOVING_PIECES_MAX - this.movingPiecesAvailable--] = choice;
             }
         }
     }

@@ -48,43 +48,43 @@ public class DiceCupGUI extends DiceCupUI {
         this.setLayout(new GridBagLayout());
         
         // Player Label
-        turnList = new JLabel("Loading Players...");
+        this.turnList = new JLabel("Loading Players...");
         GridBagConstraints labelConstraints = new GridBagConstraints();
         labelConstraints.gridx = 0;
         labelConstraints.gridy = 0;
         labelConstraints.gridwidth = 2;
         labelConstraints.anchor = GridBagConstraints.LINE_START;
         labelConstraints.insets = new Insets(0, 0, SEPARATION_SIZE, 0);
-        this.add(turnList, labelConstraints);
+        this.add(this.turnList, labelConstraints);
         
         // Create Dice Buttons
         GridBagConstraints diceConstraints = new GridBagConstraints();
-        diceSelection = new JButton[DiceCup.getDiceTotal()];
-        for (int i = 0; i < diceSelection.length; i++)
+        this.diceSelection = new JButton[DiceCup.getDiceTotal()];
+        for (int i = 0; i < this.diceSelection.length; i++)
         {
-            diceSelection[i] = new JButton("0");
-            diceSelection[i].setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
-            diceSelection[i].setMaximumSize(new Dimension(DICE_SIZE, DICE_SIZE));
-            diceSelection[i].setFont(new Font(diceSelection[i].getFont().getFontName(), Font.PLAIN, DICE_FONT_SIZE));
+            this.diceSelection[i] = new JButton("0");
+            this.diceSelection[i].setPreferredSize(new Dimension(DICE_SIZE, DICE_SIZE));
+            this.diceSelection[i].setMaximumSize(new Dimension(DICE_SIZE, DICE_SIZE));
+            this.diceSelection[i].setFont(new Font(this.diceSelection[i].getFont().getFontName(), Font.PLAIN, DICE_FONT_SIZE));
             
             diceConstraints.gridx = i % DiceCup.getDiceChosenMax(); // 0 1 0 1 0 1
             diceConstraints.gridy = i / DiceCup.getDiceChosenMax() + 1; // 0 0 1 1 2 2
             diceConstraints.insets = new Insets(DICE_MARGIN, DICE_MARGIN, DICE_MARGIN, DICE_MARGIN);
             
-            this.add(diceSelection[i], diceConstraints);
+            this.add(this.diceSelection[i], diceConstraints);
         }
         
         // Create Interaction Buttons
-        rollSubmit = new JButton("Submit Roll");
-        rollSubmit.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        rollSubmit.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        rollSubmit.setVisible(false);
-        rollDice = new JButton("Roll Dice");
-        rollDice.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        rollDice.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        endTurn = new JButton("End Turn");
-        endTurn.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        endTurn.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.rollSubmit = new JButton("Submit Roll");
+        this.rollSubmit.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.rollSubmit.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.rollSubmit.setVisible(false);
+        this.rollDice = new JButton("Roll Dice");
+        this.rollDice.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.rollDice.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.endTurn = new JButton("End Turn");
+        this.endTurn.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
+        this.endTurn.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         
         GridBagConstraints buttonConstraints = new GridBagConstraints();
         buttonConstraints.gridx = 0;
@@ -102,14 +102,14 @@ public class DiceCupGUI extends DiceCupUI {
     
     public void buttonsEnable()
     {
-        rollDice.setEnabled(true);
-        endTurn.setEnabled(true);
+        this.rollDice.setEnabled(true);
+        this.endTurn.setEnabled(true);
     }
     
     public void buttonsDisable()
     {
-        rollDice.setEnabled(false);
-        endTurn.setEnabled(false);
+        this.rollDice.setEnabled(false);
+        this.endTurn.setEnabled(false);
     }
     
     @Override
@@ -151,9 +151,9 @@ public class DiceCupGUI extends DiceCupUI {
             dieRoll = diceRoll[dieRollIndex];
             switch (i / 2)
             {
-                case 0 -> diceSelection[dieRollIndex].setText("(" + dieRoll + ")");
-                case 1 -> diceSelection[dieRollIndex].setText("{" + dieRoll + "}");
-                default -> diceSelection[dieRollIndex].setText("[" + dieRoll + "]");
+                case 0 -> this.diceSelection[dieRollIndex].setText("(" + dieRoll + ")");
+                case 1 -> this.diceSelection[dieRollIndex].setText("{" + dieRoll + "}");
+                default -> this.diceSelection[dieRollIndex].setText("[" + dieRoll + "]");
             }
         }
     }
@@ -172,7 +172,7 @@ public class DiceCupGUI extends DiceCupUI {
         this.endTurn.setVisible(true);
         this.rollSubmit.setVisible(false);
         
-        for (JButton diceButton : diceSelection)
+        for (JButton diceButton : this.diceSelection)
         {
             diceButton.setEnabled(false);
         }
@@ -185,7 +185,7 @@ public class DiceCupGUI extends DiceCupUI {
         this.endTurn.setVisible(false);
         this.rollSubmit.setVisible(true);
         
-        for (JButton diceButton : diceSelection)
+        for (JButton diceButton : this.diceSelection)
         {
             diceButton.setEnabled(true);
         }
@@ -207,7 +207,7 @@ public class DiceCupGUI extends DiceCupUI {
         }
         
         label += "</ul></html>";
-        turnList.setText(label);
+        this.turnList.setText(label);
     }
     
     public void displayWinner(Player player)

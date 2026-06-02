@@ -42,19 +42,19 @@ public class GameRound extends JFrame {
         this.diceCup = new DiceCup();
         if (Game.USE_GUI)
         {
-            this.boardUI = new GameBoardGUI(board);
-            this.diceCupUI = new DiceCupGUI(diceCup);
+            this.boardUI = new GameBoardGUI(this.board);
+            this.diceCupUI = new DiceCupGUI(this.diceCup);
         } 
         else
         {
-            this.boardUI = new GameBoardCLI(board);
-            this.diceCupUI = new DiceCupCLI(diceCup);
+            this.boardUI = new GameBoardCLI(this.board);
+            this.diceCupUI = new DiceCupCLI(this.diceCup);
         }
 
         // Frame components
         this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.X_AXIS));
-        this.add(boardUI);
-        this.add(diceCupUI);
+        this.add(this.boardUI);
+        this.add(this.diceCupUI);
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -75,38 +75,38 @@ public class GameRound extends JFrame {
     private void playGUI()
     {
         // Set up round beforehand
-        boardUI.drawBoard();
-        diceCupUI.askToRoll();
-        ((DiceCupGUI) diceCupUI).updateTurnList();
-        currentPlayer = Game.getPlayers().peek();
-        currentPlayer.setMoving(true);
-        diceSelection = new LinkedList<>();
+        this.boardUI.drawBoard();
+        this.diceCupUI.askToRoll();
+        ((DiceCupGUI) this.diceCupUI).updateTurnList();
+        this.currentPlayer = Game.getPlayers().peek();
+        this.currentPlayer.setMoving(true);
+        this.diceSelection = new LinkedList<>();
         this.setVisible(true);
         
-        ((DiceCupGUI) diceCupUI).getRollDice().addActionListener((ActionEvent e) -> {
-            boardUI.drawBoard();
-            ((DiceCupGUI) diceCupUI).setRollSubmitEnabled(false);
+        ((DiceCupGUI) this.diceCupUI).getRollDice().addActionListener((ActionEvent e) -> {
+            this.boardUI.drawBoard();
+            ((DiceCupGUI) this.diceCupUI).setRollSubmitEnabled(false);
             haveTurn(getCurrentPlayer());
         });
         
-        ((DiceCupGUI) diceCupUI).getEndTurn().addActionListener((ActionEvent e) -> {
-            ((DiceCupGUI) diceCupUI).resetDice();
+        ((DiceCupGUI) this.diceCupUI).getEndTurn().addActionListener((ActionEvent e) -> {
+            ((DiceCupGUI) this.diceCupUI).resetDice();
             endTurn(getCurrentPlayer());
-            diceCupUI.askToRoll();
+            this.diceCupUI.askToRoll();
         });
         
-        ((DiceCupGUI) diceCupUI).getRollSubmit().addActionListener((ActionEvent e) -> {
+        ((DiceCupGUI) this.diceCupUI).getRollSubmit().addActionListener((ActionEvent e) -> {
             movePieces(getPairings());
-            diceSelection = new LinkedList<>();
-            boardUI.drawBoard();
-            diceCupUI.askToRoll();
+            this.diceSelection = new LinkedList<>();
+            this.boardUI.drawBoard();
+            this.diceCupUI.askToRoll();
         });
         
-        for (JButton die : ((DiceCupGUI) diceCupUI).getDiceSelection())
+        for (JButton die : ((DiceCupGUI) this.diceCupUI).getDiceSelection())
         {
             die.addActionListener((ActionEvent e) -> {
                 // Find die index in dice list
-                JButton[] dice = ((DiceCupGUI) diceCupUI).getDiceSelection();
+                JButton[] dice = ((DiceCupGUI) this.diceCupUI).getDiceSelection();
                 int index = 0;
                 
                 // The list is short, so theoretically the O(n^2) check each time doesn't add up to much
@@ -128,42 +128,42 @@ public class GameRound extends JFrame {
         var kbinput = new Scanner(System.in);
         String input;
         
-        currentPlayer = Game.getPlayers().peek();
-        currentPlayer.setMoving(true);
-        boardUI.drawBoard();
+        this.currentPlayer = Game.getPlayers().peek();
+        this.currentPlayer.setMoving(true);
+        this.boardUI.drawBoard();
         
         // Play game as long as someone hasn't won yet
-        while (!winConditionMet)
+        while (!this.winConditionMet)
         {
             do {
                 // Ask to continue turn
                 do {
-                    diceCupUI.askToRoll();
+                    this.diceCupUI.askToRoll();
                     input = kbinput.nextLine().strip().toLowerCase(); // normalise input
                     switch (input)
                     {
-                        case "y" -> haveTurn(currentPlayer);
-                        case "n" -> endTurn(currentPlayer);
+                        case "y" -> haveTurn(this.currentPlayer);
+                        case "n" -> endTurn(this.currentPlayer);
                         default -> // invalid input
                             System.out.println("Invalid input. Please respond with either 'y' or 'n'...");
                     }
                 } while (!(input.equals("y") || input.equals("n")));
                 
                 
-            } while (currentPlayer.isMoving());
+            } while (this.currentPlayer.isMoving());
         }
         
-        System.out.println("\n" + currentPlayer.getColour().font() + currentPlayer.getName() + Colour.DEFAULT.font() + " wins!!!");
+        System.out.println("\n" + this.currentPlayer.getColour().font() + this.currentPlayer.getName() + Colour.DEFAULT.font() + " wins!!!");
     }
         
     private List<Integer[]> getPairings()
     {
         // Get pairings and visually display them
-        int[] diceRoll = diceCupUI.getDiceCup().getDiceRoll();
+        int[] diceRoll = this.diceCupUI.getDiceCup().getDiceRoll();
         List<Integer[]> pairings = new ArrayList<>();
         Integer[] pairing;
         
-        Iterator iterDiceSelection = diceSelection.iterator();
+        Iterator iterDiceSelection = this.diceSelection.iterator();
         
         while (iterDiceSelection.hasNext())
         {
@@ -182,7 +182,7 @@ public class GameRound extends JFrame {
     
     private void modifyDiceSelection(int index)
     {
-        Iterator iterDiceSelection = diceSelection.iterator();
+        Iterator iterDiceSelection = this.diceSelection.iterator();
         Integer diceSelectionIndex;
         boolean diceSelectionContainsIndex = false;
         
@@ -199,14 +199,14 @@ public class GameRound extends JFrame {
         // Adds or removes index from diceSelection
         if (diceSelectionContainsIndex)
         {
-            diceSelection.remove((Integer) index);
+            this.diceSelection.remove((Integer) index);
         }
         else
         {
-            diceSelection.add((Integer) index);
+            this.diceSelection.add((Integer) index);
         }
         
-        ((DiceCupGUI) diceCupUI).displayPairings(diceSelection);
+        ((DiceCupGUI) this.diceCupUI).displayPairings(this.diceSelection);
         
         checkPairings();
     }
@@ -214,25 +214,25 @@ public class GameRound extends JFrame {
     private void checkPairings()
     {
         // Immediately end if dice selection pairing isn't even or is empty
-        if (diceSelection.size() % DiceCup.getDiceChosenMax() != 0 || diceSelection.isEmpty())
+        if (this.diceSelection.size() % DiceCup.getDiceChosenMax() != 0 || this.diceSelection.isEmpty())
         {
-            ((DiceCupGUI) diceCupUI).setRollSubmitEnabled(false);
+            ((DiceCupGUI) this.diceCupUI).setRollSubmitEnabled(false);
             return;
         }
         
         // Check with only valid pairings
-        ((DiceCupGUI) diceCupUI).setRollSubmitEnabled(diceCup.dicePairingsExists(getPairings()));
+        ((DiceCupGUI) this.diceCupUI).setRollSubmitEnabled(this.diceCup.dicePairingsExists(getPairings()));
     }
     
     private void haveTurn(Player currentPlayer)
     {
         // Check if the user has any available choices after a roll
-        boolean hasChoicesAvailable = diceCup.rollTurn(
+        boolean hasChoicesAvailable = this.diceCup.rollTurn(
                 currentPlayer,
                 this.board
         );
         
-        diceCupUI.displayDice();
+        this.diceCupUI.displayDice();
         
         if (!hasChoicesAvailable) {
             bust();
@@ -241,14 +241,14 @@ public class GameRound extends JFrame {
         
         if (Game.USE_GUI)
         {
-            diceCupUI.askToSelect();
+            this.diceCupUI.askToSelect();
         }
         else
         {
             makeChoice();
         }
         
-        boardUI.drawBoard();
+        this.boardUI.drawBoard();
     }
     
     private void endTurn(Player currentPlayer)
@@ -259,12 +259,12 @@ public class GameRound extends JFrame {
         if (currentPlayer.getClaimedTotal() >= Game.getWinCondition())
         {
             if (Game.USE_GUI) {
-                ((DiceCupGUI) diceCupUI).buttonsDisable();
-                ((DiceCupGUI) diceCupUI).displayWinner(currentPlayer);
+                ((DiceCupGUI) this.diceCupUI).buttonsDisable();
+                ((DiceCupGUI) this.diceCupUI).displayWinner(currentPlayer);
             }
             synchronized (Game.USER_PROMPT)
             {
-                winConditionMet = true;
+                this.winConditionMet = true;
                 currentPlayer.hasWon();
                 Game.USER_PROMPT.notify();
             }
@@ -274,13 +274,13 @@ public class GameRound extends JFrame {
             nextPlayer();
         }
         
-        boardUI.drawBoard();
+        this.boardUI.drawBoard();
     }
     
     private void bust()
     {
-        currentPlayer.bust();
-        diceCupUI.bust();
+        this.currentPlayer.bust();
+        this.diceCupUI.bust();
         
         try
         {
@@ -292,7 +292,7 @@ public class GameRound extends JFrame {
         }
         
         nextPlayer();
-        boardUI.drawBoard();
+        this.boardUI.drawBoard();
     }
     
     private void nextPlayer()
@@ -308,7 +308,7 @@ public class GameRound extends JFrame {
     
     private void makeChoice() // For CLI
     {
-        diceCupUI.displayChoices();
+        this.diceCupUI.displayChoices();
         
         // Select input
         var kbinput = new Scanner(System.in);
@@ -316,7 +316,7 @@ public class GameRound extends JFrame {
         int saveValue = -1;
         do
         {
-            diceCupUI.askToSelect();
+            this.diceCupUI.askToSelect();
             try
             {
                 saveValue = kbinput.nextInt();
@@ -325,11 +325,11 @@ public class GameRound extends JFrame {
                 kbinput.nextLine();
             }
 
-            if (!(1 <= saveValue && saveValue <= diceCup.getDiceChoicesFiltered().size()))
+            if (!(1 <= saveValue && saveValue <= this.diceCup.getDiceChoicesFiltered().size()))
             {
-                System.out.println("Invalid input. Please input a value between 1 and " + (diceCup.getDiceChoicesFiltered().size()) + "...\n" + Game.USER_PROMPT);
+                System.out.println("Invalid input. Please input a value between 1 and " + (this.diceCup.getDiceChoicesFiltered().size()) + "...\n" + Game.USER_PROMPT);
             }
-        } while (!(1 <= saveValue && saveValue <= diceCup.getDiceChoicesFiltered().size()));
+        } while (!(1 <= saveValue && saveValue <= this.diceCup.getDiceChoicesFiltered().size()));
         
         movePieces(saveValue);
     }
@@ -337,15 +337,15 @@ public class GameRound extends JFrame {
     private void movePieces(int saveValue)
     {
         // Save the choice
-        int[] diceChoice = diceCup.choiceToOutput(saveValue);
-        currentPlayer.saveMoving(diceChoice, this.board);
+        int[] diceChoice = this.diceCup.choiceToOutput(saveValue);
+        this.currentPlayer.saveMoving(diceChoice, this.board);
     }
     
     private void movePieces(List<Integer[]> saveChosen)
     {
         // Save the choice
-        int[] diceChoice = diceCup.choiceToOutput(saveChosen);
-        currentPlayer.saveMoving(diceChoice, this.board);
+        int[] diceChoice = this.diceCup.choiceToOutput(saveChosen);
+        this.currentPlayer.saveMoving(diceChoice, this.board);
     }
     
     public Player getCurrentPlayer()

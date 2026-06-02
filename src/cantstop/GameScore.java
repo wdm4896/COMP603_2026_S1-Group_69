@@ -21,11 +21,21 @@ import java.util.List;
  * @author admin
  */
 public class GameScore implements Score {
-    
+    private static GameScore instance; // Singleton
     private final DBManager dbManager;
     private final Connection conn;
     
-    public GameScore()
+    public static GameScore getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new GameScore();
+        }
+        
+        return instance;
+    }
+    
+    private GameScore()
     {
         this.dbManager = new DBManager();
         this.conn = this.dbManager.getConnection();

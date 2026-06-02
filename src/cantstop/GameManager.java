@@ -14,13 +14,7 @@ import java.util.List;
  */
 public class GameManager {
     private final List<Colour> coloursAvailable = new LinkedList<>(Arrays.asList(Colour.values()));
-    private final GameScore scoreBoard;
     public static GameRound roundCurrent;
-    
-    public GameManager(GameScore scoreBoard)
-    {
-        this.scoreBoard = scoreBoard;
-    }
     
     public void gameStart()
     {
@@ -41,7 +35,7 @@ public class GameManager {
     
     public void saveScores()
     {
-        this.scoreBoard.scoresSaveFile();
+        Game.getScoreBoard().scoresSaveFile();
         try
         {
             Thread.sleep(1000);
@@ -62,10 +56,5 @@ public class GameManager {
     public List<Colour> getColoursAvailable()
     {
         return this.coloursAvailable;
-    }
-    
-    public GameScore getScoreBoard()
-    {
-        return this.scoreBoard;
     }
 }

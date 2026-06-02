@@ -20,15 +20,13 @@ import javax.swing.border.EmptyBorder;
  */
 public class GameDialogPlayAgain extends JDialog {
     private final static int FONT_SIZE = 16;
-    private final GameScore scoreBoard;
     private final JButton playYes;
     private final JButton playNo;
     private final JLabel playerScores;
     
-    public GameDialogPlayAgain(JFrame frame, GameScore scoreBoard)
+    public GameDialogPlayAgain(JFrame frame)
     {
         super(frame, "Play Again?");
-        this.scoreBoard = scoreBoard;
         
         JLabel playAgainDialogue = new JLabel("Would you like to play again?");
         playAgainDialogue.setFont(new Font(playAgainDialogue.getFont().getFontName(), Font.PLAIN, FONT_SIZE));
@@ -40,8 +38,8 @@ public class GameDialogPlayAgain extends JDialog {
         this.add(this.playerScores, BorderLayout.CENTER);
         
         JPanel playAgainOptions = new JPanel();
-        playYes = new JButton("Yes");
-        playNo = new JButton("No");
+        this.playYes = new JButton("Yes");
+        this.playNo = new JButton("No");
         playAgainOptions.add(playYes);
         playAgainOptions.add(playNo);
         this.add(playAgainOptions, BorderLayout.SOUTH);
@@ -59,7 +57,7 @@ public class GameDialogPlayAgain extends JDialog {
     
     public void askDialogue()
     {
-        this.playerScores.setText(scoreBoard.scoresDisplayGUI());
+        this.playerScores.setText(Game.getScoreBoard().scoresDisplayGUI());
         this.setVisible(true);
     }
 }

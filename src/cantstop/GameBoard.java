@@ -17,8 +17,8 @@ public class GameBoard {
     private final static int LENGTH_MIN = 3;
     private final static int LENGTH_MAX = 13;
     
-    private final static int[] columnValues = new int[BOARD_WIDTH];
-    private final static int[] columnSizes = new int[BOARD_WIDTH];
+    private final static int[] COLUMN_VALUES = new int[BOARD_WIDTH];
+    private final static int[] COLUMN_SIZES = new int[BOARD_WIDTH];
     private final boolean[] columnClaimed = new boolean[BOARD_WIDTH];
     
     public GameBoard()
@@ -40,9 +40,9 @@ public class GameBoard {
                 size = (i - BOARD_WIDTH / 2) * -((float) (LENGTH_MAX - LENGTH_MIN) / (valueMiddle - COLUMN_MIN)) + LENGTH_MAX;
             }
             
-            columnValues[i] = value++;
-            columnSizes[i] = Math.round(size);
-            columnClaimed[i] = false;
+            COLUMN_VALUES[i] = value++;
+            COLUMN_SIZES[i] = Math.round(size);
+            this.columnClaimed[i] = false;
         }
     }
     
@@ -80,12 +80,12 @@ public class GameBoard {
     
     public int[] getColumnValues()
     {
-        return columnValues;
+        return COLUMN_VALUES;
     }
     
     public int[] getColumnSizes()
     {
-        return columnSizes;
+        return COLUMN_SIZES;
     }
     
     public static int getColumnMin()

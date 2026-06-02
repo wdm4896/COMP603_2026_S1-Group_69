@@ -22,12 +22,9 @@ public class GamePanelEnd extends JPanel {
     private final JButton saveNo;
     private final JLabel dialogue;
     private final JLabel playerScores;
-    private final GameScore scoreBoard;
     
-    public GamePanelEnd(GameScore scoreBoard)
+    public GamePanelEnd()
     {
-        this.scoreBoard = scoreBoard;
-        
         this.setLayout(new BorderLayout());
         
         this.dialogue = new JLabel("Would you like to save your scores?");
@@ -52,7 +49,7 @@ public class GamePanelEnd extends JPanel {
     
     public final void displayScores()
     {
-        String label = this.scoreBoard.scoresDisplayGUI();
+        String label = Game.getScoreBoard().scoresDisplayGUI();
         this.playerScores.setText(label);
     }
     
@@ -70,8 +67,8 @@ public class GamePanelEnd extends JPanel {
     {
         try
         {
-            this.scoreBoard.scoresSaveDB();
-            this.playerScores.setText(this.scoreBoard.scoresDisplayGUI_DB());
+            Game.getScoreBoard().scoresSaveDB();
+            this.playerScores.setText(Game.getScoreBoard().scoresDisplayGUI_DB());
         } catch (NullPointerException e) {
             // Won't display the database
         }
