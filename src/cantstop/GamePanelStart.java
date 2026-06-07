@@ -41,7 +41,7 @@ public class GamePanelStart extends JPanel {
         playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.PAGE_AXIS));
         
         JPanel playerPanel = new JPanel();
-        playerPanel.add(new JLabel("Name: "));
+        playerPanel.add(new JLabel("Display Name: "));
         playerPanel.add(this.fieldName);
         playerPanel.add(new JLabel("Username: "));
         playerPanel.add(this.fieldUsername);

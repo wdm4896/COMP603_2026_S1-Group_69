@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Tue Jun 02 16:49:58 NZST 2026:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-86aa-bfd8-000000629a60 
-on database directory /home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/CantStop/CantStopDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4aa298b7 
-Loaded from file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/CantStop/lib/derby.jar
+Sun Jun 07 15:10:57 NZST 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-a00f-e7fc-000001a1e3f8 
+on database directory /home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/fuck you/COMP603_2026_S1-Group_69/CantStopDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4aa298b7 
+Loaded from file:/home/admin/AUT/Year%202/COMP603%20-%20Program%20Design%20and%20Construction%20-%20S1/Projects/fuck%20you/COMP603_2026_S1-Group_69/lib/derby.jar
 java.vendor=Arch Linux
 java.runtime.version=26.0.1
-user.dir=/home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/CantStop
+user.dir=/home/admin/AUT/Year 2/COMP603 - Program Design and Construction - S1/Projects/fuck you/COMP603_2026_S1-Group_69
 os.name=Linux
 os.arch=amd64
 os.version=7.0.10-arch1-1

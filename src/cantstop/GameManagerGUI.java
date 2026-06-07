@@ -68,11 +68,15 @@ public class GameManagerGUI extends GameManagerUI {
         // Submit input
         this.getGameManager().addPlayer(name, username, colour);
         
+        // Set frame component states
         switch (Game.getPlayers().size())
         {
             case 1 -> this.panelStart.getStartGame().setEnabled(true);
             case Game.PLAYERS_MAX -> this.panelStart.getFieldSubmit().setEnabled(false);
         }
+        
+        this.panelStart.getFieldName().setText("");
+        this.panelStart.getFieldUsername().setText("");
     }
     
     @Override

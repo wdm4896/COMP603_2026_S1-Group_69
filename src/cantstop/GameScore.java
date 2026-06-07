@@ -21,6 +21,7 @@ import java.util.List;
  * @author admin
  */
 public class GameScore implements Score {
+    private final static int FETCH_ROWS = 10;
     private static GameScore instance; // Singleton
     private final DBManager dbManager;
     private final Connection conn;
@@ -116,7 +117,7 @@ public class GameScore implements Score {
         try {
             Statement statement = this.conn.createStatement();
             ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT 10 ROWS ONLY"
+                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT " + FETCH_ROWS  + "ROWS ONLY"
             );
             
             String username;
@@ -143,7 +144,7 @@ public class GameScore implements Score {
         try {
             Statement statement = this.conn.createStatement();
             ResultSet rs = statement.executeQuery(
-                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT 10 ROWS ONLY"
+                    "SELECT * FROM APP.SCORES ORDER BY SCORE DESC FETCH NEXT " + FETCH_ROWS + " ROWS ONLY"
             );
             
             String username;

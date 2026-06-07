@@ -27,7 +27,7 @@ public class GamePanelEnd extends JPanel {
     {
         this.setLayout(new BorderLayout());
         
-        this.dialogue = new JLabel("Would you like to save your scores?");
+        this.dialogue = new JLabel("Would you like to save your scores for this session?");
         this.dialogue.setFont(new Font(this.dialogue.getFont().getFontName(), Font.PLAIN, FONT_SIZE));
         this.dialogue.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.dialogue.setHorizontalAlignment(SwingConstants.CENTER);

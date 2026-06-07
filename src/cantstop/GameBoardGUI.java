@@ -29,6 +29,7 @@ public class GameBoardGUI extends GameBoardUI {
     private final int[] columnSizes = this.getBoard().getColumnSizes();
     
     private final static int PIECE_SIZE = 25;
+    private final static int PIECE_SHIFT = 10;
     private final static Color COLOUR_EMPTY = Color.PINK;
     private final static Color COLOUR_MOVING = Color.WHITE;
     
@@ -153,20 +154,23 @@ public class GameBoardGUI extends GameBoardUI {
     private void drawPosPlayers(Graphics g, Stack<Player> players)
     {
         Player player;
+        int playerIndex = players.size() - 1;
         
         while (!players.isEmpty())
         {
             player = players.pop();
             g.setColor(player.getColour().color());
-            drawPosPlayer(g, player.getPosCurrent(), player.getColour().color());
+            drawPosPlayer(g, player.getPosCurrent(), player.getColour().color(), playerIndex--);
         }
     }
     
-    private void drawPosPlayer(Graphics g, int[] playerPos, Color color)
+    private void drawPosPlayer(Graphics g, int[] playerPos, Color color, int playerIndex)
     {
         int posX;
         int posY;
         float posYShift;
+        int posIndexShiftX = ((playerIndex) % 2 == 0) ? PIECE_SHIFT : - PIECE_SHIFT;
+        int posIndexShiftY = ((playerIndex) / 2 == 0) ? PIECE_SHIFT : - PIECE_SHIFT;
         
         g.setColor(color);
         for (int i = 0; i < BOARD_WIDTH; i++)
@@ -178,8 +182,8 @@ public class GameBoardGUI extends GameBoardUI {
                 if (j != playerPos[i] - 1) { continue; }
 
                 posYShift = ((float) (BOARD_HEIGHT - this.columnSizes[i]) / 2) * (PANEL_HEIGHT / (BOARD_HEIGHT));
-                posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2);
-                posY = (BOARD_HEIGHT - j - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift;
+                posX = i * (PANEL_WIDTH / BOARD_WIDTH) + ((PIECE_SIZE + SCREEN_PADDING) / 2) - posIndexShiftX;
+                posY = (BOARD_HEIGHT - j - 1) * (PANEL_HEIGHT / BOARD_HEIGHT) + (SCREEN_PADDING / 2) - (int) posYShift - posIndexShiftY;
                 g.fillRect(posX, posY, PIECE_SIZE, PIECE_SIZE);
             }
         }
